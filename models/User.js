@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
@@ -50,3 +51,23 @@ userSchema.methods.comparePassword = async function(candidatePassword) {
 };
 
 module.exports = mongoose.model('User', userSchema);
+=======
+class User {
+    constructor(data) {
+        this.id = data._id || data.id || null;
+        this.username = data.username || '';
+        this.name = data.name || '';
+        this.email = data.email || '';
+        this.role = data.role || 'user';
+        this.preferences = data.preferences || {
+            notifications: true,
+            darkMode: false,
+            dataRefresh: 5
+        };
+    }
+    
+    isAdmin() {
+        return this.role === 'admin';
+    }
+}
+>>>>>>> Stashed changes
