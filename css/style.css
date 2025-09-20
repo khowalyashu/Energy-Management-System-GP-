@@ -115,7 +115,7 @@ body {
 
 .btn-primary {
     background-color: #3498db;
-    color: white;
+    color: rgba(255, 255, 255, 0.86);
     width: 100%;
 }
 
@@ -124,7 +124,7 @@ body {
 }
 
 .btn-secondary {
-    background-color: #e74c3c;
+    background-color: #a51a0b;
     color: white;
 }
 
