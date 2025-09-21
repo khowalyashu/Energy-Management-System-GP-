@@ -1,56 +1,100 @@
-class DashboardView {
-    constructor() {
-        this.energyValue = document.getElementById('energy-value');
-        this.costValue = document.getElementById('cost-value');
-        this.devicesValue = document.getElementById('devices-value');
-        this.savingsValue = document.getElementById('savings-value');
-        
-        this.energyTrend = document.getElementById('energy-trend');
-        this.costTrend = document.getElementById('cost-trend');
-        this.devicesTrend = document.getElementById('devices-trend');
-        this.savingsTrend = document.getElementById('savings-trend');
-    }
-    
-    updateStats(stats) {
-        if (stats.energy) {
-            this.energyValue.textContent = `${stats.energy.value.toFixed(2)} kWh`;
-            this.updateTrend(this.energyTrend, stats.energy.trend);
-        }
-        
-        if (stats.cost) {
-            this.costValue.textContent = `$${stats.cost.value.toFixed(2)}`;
-            this.updateTrend(this.costTrend, stats.cost.trend);
-        }
-        
-        if (stats.devices) {
-            this.devicesValue.textContent = stats.devices.value;
-            this.updateTrend(this.devicesTrend, stats.devices.trend);
-        }
-        
-        if (stats.savings) {
-            this.savingsValue.textContent = `$${stats.savings.value.toFixed(2)}`;
-            this.updateTrend(this.savingsTrend, stats.savings.trend);
-        }
-    }
-    
-    updateTrend(element, trend) {
-        element.textContent = trend >= 0 ? `+${trend.toFixed(1)}%` : `${trend.toFixed(1)}%`;
-        element.className = `stat-trend ${trend >= 0 ? 'positive' : 'negative'}`;
-    }
-    
-    updateEnergyChart(labels, data) {
-        if (window.myEMSApp && window.myEMSApp.energyChart) {
-            window.myEMSApp.energyChart.data.labels = labels;
-            window.myEMSApp.energyChart.data.datasets[0].data = data;
-            window.myEMSApp.energyChart.update();
-        }
-    }
-    
-    updateDeviceChart(labels, data) {
-        if (window.myEMSApp && window.myEMSApp.deviceChart) {
-            window.myEMSApp.deviceChart.data.labels = labels;
-            window.myEMSApp.deviceChart.data.datasets[0].data = data;
-            window.myEMSApp.deviceChart.update();
-        }
-    }
+// js/views/DashboardView.js
+const TYPE_ORDER = ['lighting', 'heating', 'cooling', 'appliances', 'electronics'];
+
+ 
+function updateDeviceTypeTiles(byType = {}) {
+  // a) by fixed IDs
+  const idMap = {
+    lighting:    '#lighting-value',
+    heating:     '#heating-value',
+    cooling:     '#cooling-value',
+    appliances:  '#appliances-value',
+    electronics: '#electronics-value',
+  };
+
+  Object.entries(idMap).forEach(([type, selector]) => {
+    const el = document.querySelector(selector);
+    if (el) el.textContent = `${Number(byType[type] || 0).toFixed(1)} kWh`;
+  });
+
+ 
+  TYPE_ORDER.forEach((type) => {
+    const node = document.querySelector(`.device-type-item[data-type="${type}"] .device-type-value`);
+    if (node) node.textContent = `${Number(byType[type] || 0).toFixed(1)} kWh`;
+  });
 }
+
+
+function updateDonutChart(byType = {}) {
+  if (!window.deviceChart) return;
+  window.deviceChart.data.datasets[0].data = [
+    Number(byType.lighting)    || 0,
+    Number(byType.heating)     || 0,
+    Number(byType.cooling)     || 0,
+    Number(byType.appliances)  || 0,
+    Number(byType.electronics) || 0,
+  ];
+  window.deviceChart.update();
+}
+
+
+function renderByType(byType = {}) {
+  updateDeviceTypeTiles(byType);
+  updateDonutChart(byType);
+}
+
+
+function renderSeries(series = []) {
+  if (typeof window.renderEnergySeries === 'function') {
+    window.renderEnergySeries(series);
+  } else if (window.energyLineChart?.data?.datasets?.[0]) {
+    // Minimal, safe update if exposed the chart instance
+    window.energyLineChart.data.datasets[0].data = series;
+    window.energyLineChart.update();
+  }
+}
+
+
+async function loadDashboardEnergy() {
+  try {
+    const energyData = await ApiService.energy(); // => { series, byType }
+    renderSeries(energyData.series || []);
+    renderByType(energyData.byType || {});
+  } catch (err) {
+    console.warn('[Dashboard] ApiService.energy() failed:', err);
+    // minimal fallback to keep UI stable
+    renderSeries([]);
+    renderByType({});
+  }
+}
+
+
+async function refreshDeviceTypeSummary() {
+  try {
+    const res = await fetch('/api/energy/by-type', { headers: { Accept: 'application/json' } });
+    if (res.ok) {
+      const byType = await res.json();
+      updateDeviceTypeTiles(byType);
+      return;
+    }
+    throw new Error(`HTTP ${res.status}`);
+  } catch {
+    // Fallback: use donut dataset so tiles always match the chart
+    const ds = window.deviceChart?.data?.datasets?.[0]?.data || [];
+    const byType = {};
+    TYPE_ORDER.forEach((k, i) => { byType[k] = Number(ds[i] || 0); });
+    updateDeviceTypeTiles(byType);
+  }
+}
+
+
+(async function initDashboardView() {
+  // Kick off primary load (series + donut + tiles)
+  await loadDashboardEnergy();
+
+ 
+  setTimeout(refreshDeviceTypeSummary, 100);
+
+  // Expose a manual refresher if you change data elsewhere
+  window.refreshDeviceTypeSummary = refreshDeviceTypeSummary;
+})();
