@@ -1,0 +1,7 @@
+{
+  "extension": ["js"],
+  "spec": "test/**/*.test.js",
+  "recursive": true,
+  "timeout": 20000,
+  "require": ["./test/bootstrap.js"]
+}
