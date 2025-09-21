@@ -115,7 +115,7 @@ body {
 
 .btn-primary {
     background-color: #3498db;
-    color: rgba(255, 255, 255, 0.86);
+    color: white;
     width: 100%;
 }
 
@@ -124,7 +124,7 @@ body {
 }
 
 .btn-secondary {
-    background-color: #a51a0b;
+    background-color: #e74c3c;
     color: white;
 }
 
@@ -263,7 +263,7 @@ body {
     .sidebar {
         width: 200px;
     }
-    
+
     .main-content {
         margin-left: 200px;
     }
@@ -273,25 +273,25 @@ body {
     .sidebar {
         width: 70px;
     }
-    
+
     .nav-item span {
         display: none;
     }
-    
+
     .main-content {
         margin-left: 70px;
         padding: 15px;
         padding-top: 90px;
     }
-    
+
     .header {
         padding: 15px;
     }
-    
+
     .header-left h1 {
         font-size: 1.2rem;
     }
-    
+
     .date-display {
         display: none;
     }
@@ -301,19 +301,19 @@ body {
     .sidebar {
         display: none;
     }
-    
+
     .main-content {
         margin-left: 0;
     }
-    
+
     .login-form {
         padding: 20px;
     }
-    
+
     .header-right {
         gap: 10px;
     }
-    
+
     .user-info {
         display: none;
     }
