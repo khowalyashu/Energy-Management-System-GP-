@@ -1,91 +1,69 @@
+const mongoose = require('mongoose');
 const Report = require('../models/Report');
 const EnergyData = require('../models/EnergyData');
 
-exports.generateReport = async (req, res) => {
+const isValidId = (v) => mongoose.isValidObjectId(v);
+
+function label(type) {
+  const now = new Date();
+  if (type === 'weekly')  return `Week of ${now.toDateString()}`;
+  if (type === 'monthly') return `${now.toLocaleString('default',{month:'long'})} ${now.getFullYear()}`;
+  if (type === 'yearly')  return `${now.getFullYear()}`;
+  return now.toDateString();
+}
+
+exports.list = async (_req, res) => {
   try {
-    const { type, startDate, endDate } = req.body;
-    const userId = req.user._id;
+    const list = await Report.find().sort({ createdAt: -1 }).lean();
+    res.json(list);
+  } catch (e) {
+    res.status(500).json({ message: 'Failed to fetch reports' });
+  }
+};
+
+exports.generate = async (req, res) => {
+  try {
+    const type = String(req.body?.type || 'daily').toLowerCase();
 
     const now = new Date();
-    let periodStart, periodEnd, periodName;
+    let since = new Date(now.getTime() - 24*60*60*1000);
+    if (type === 'weekly')  since = new Date(now.getTime() - 7*24*60*60*1000);
+    if (type === 'monthly') since = new Date(now.getTime() - 30*24*60*60*1000);
+    if (type === 'yearly')  since = new Date(now.getTime() - 365*24*60*60*1000);
 
-    switch (type) {
-      case 'daily':
-        periodStart = new Date(now.setHours(0, 0, 0, 0));
-        periodEnd = new Date(now.setHours(23, 59, 59, 999));
-        periodName = now.toDateString();
-        break;
-      case 'weekly':
-        const day = now.getDay();
-        const diff = now.getDate() - day + (day === 0 ? -6 : 1);
-        periodStart = new Date(now.setDate(diff));
-        periodStart.setHours(0, 0, 0, 0);
-        periodEnd = new Date(periodStart);
-        periodEnd.setDate(periodStart.getDate() + 6);
-        periodEnd.setHours(23, 59, 59, 999);
-        periodName = `Week of ${periodStart.toDateString()}`;
-        break;
-      case 'monthly':
-        periodStart = new Date(now.getFullYear(), now.getMonth(), 1);
-        periodEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-        periodEnd.setHours(23, 59, 59, 999);
-        periodName = now.toLocaleString('default', { month: 'long', year: 'numeric' });
-        break;
-      case 'yearly':
-        periodStart = new Date(now.getFullYear(), 0, 1);
-        periodEnd = new Date(now.getFullYear(), 11, 31);
-        periodEnd.setHours(23, 59, 59, 999);
-        periodName = now.getFullYear().toString();
-        break;
-      default:
-        return res.status(400).json({ message: 'Invalid report type' });
-    }
+    const [agg] = await EnergyData.aggregate([
+      { $match: { timestamp: { $gte: since } } },
+      { $group: { _id: null,
+        totalConsumption: { $sum: '$consumption' },
+        totalCost: { $sum: '$cost' },
+        dataPoints: { $sum: 1 }
+      } }
+    ]);
 
-    const energyData = await EnergyData.find({
-      userId,
-      timestamp: { $gte: periodStart, $lte: periodEnd }
-    }).sort({ timestamp: 1 });
-
-    const totalConsumption = energyData.reduce((sum, item) => sum + item.consumption, 0);
-    const totalCost = energyData.reduce((sum, item) => sum + item.cost, 0);
-
-    const report = await Report.create({
+    const doc = await Report.create({
       type,
-      period: periodName,
-      data: energyData,
-      totalConsumption,
-      totalCost,
-      userId
+      period: label(type),
+      totalConsumption: Number((agg?.totalConsumption || 0).toFixed(2)),
+      totalCost: Number((agg?.totalCost || 0).toFixed(2)),
+      dataPoints: agg?.dataPoints || 0,
+      generatedAt: new Date(),
+      // 👇 only set userId if it's a real ObjectId
+      ...(isValidId(req.user?._id) && { userId: req.user._id }),
     });
 
-    res.status(201).json(report);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(201).json(doc);
+  } catch (e) {
+    console.error('[Reports:generate]', e);
+    res.status(500).json({ message: e.message || 'Failed to generate report' });
   }
 };
 
-exports.getReports = async (req, res) => {
+exports.remove = async (req, res) => {
   try {
-    const reports = await Report.find({ userId: req.user._id }).sort({ createdAt: -1 });
-    res.json(reports);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
-exports.getReport = async (req, res) => {
-  try {
-    const report = await Report.findOne({
-      _id: req.params.id,
-      userId: req.user._id
-    });
-
-    if (!report) {
-      return res.status(404).json({ message: 'Report not found' });
-    }
-
-    res.json(report);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
+    const removed = await Report.findByIdAndDelete(req.params.id);
+    if (!removed) return res.status(404).json({ message: 'Report not found' });
+    res.json({ ok: true });
+  } catch (e) {
+    res.status(500).json({ message: 'Failed to delete report' });
   }
 };
