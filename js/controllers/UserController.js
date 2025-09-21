@@ -1,132 +1,75 @@
-class UserController {
-    constructor() {
-        this.view = new UsersView();
+(function () {
+    const $ = (s) => document.querySelector(s);
+
+    async function renderList() {
+        const wrap = $('#userList');
+        if (!wrap) return;
+        const list = await ApiService.listUsers();
+        wrap.innerHTML = list.map((u) => {
+            const id = u._id || u.id;
+            const joined = u.createdAt ? new Date(u.createdAt).toLocaleDateString() : '—';
+            return `
+        <div class="user-card" data-id="${id}">
+          <h4>${u.name}</h4>
+          <p>Username: ${u.username}</p>
+          <p>Email: ${u.email}</p>
+          <p>Role: ${u.role}</p>
+          <p>Joined: ${joined}</p>
+          <div>
+            <button class="btn btn-primary edit-user" data-id="${id}">Edit</button>
+            <button class="btn btn-danger delete-user" data-id="${id}">Delete</button>
+          </div>
+        </div>`;
+        }).join('');
     }
-    
-    async loadUsers() {
-        try {
-            // Check if user is admin
-            if (!window.myEMSApp.user.isAdmin()) {
-                alert('Access denied. Admin privileges required.');
-                return;
-            }
-            
-            const users = await ApiService.getUsers();
-            this.view.displayUsers(users);
-            
-            // Add event listeners
-            this.addEventListeners();
-        } catch (error) {
-            console.error('Error loading users:', error);
-            alert('Failed to load users: ' + error.message);
-        }
+
+    function openFormWith(u) {
+        const modal = $('#userModal');
+        if ($('#userId')) $('#userId').value = u?.id || '';
+        if ($('#userName')) $('#userName').value = u?.name || '';
+        if ($('#userUsername')) $('#userUsername').value = u?.username || '';
+        if ($('#userEmail')) $('#userEmail').value = u?.email || '';
+        if ($('#userRole')) $('#userRole').value = u?.role || 'user';
+        if (modal) modal.style.display = 'block';
     }
-    
-    addEventListeners() {
-        document.querySelectorAll('[data-action="edit"]').forEach(button => {
-            button.addEventListener('click', (e) => {
-                const userId = e.target.getAttribute('data-id');
-                this.editUser(userId);
-            });
-        });
-        
-        document.querySelectorAll('[data-action="delete"]').forEach(button => {
-            button.addEventListener('click', (e) => {
-                const userId = e.target.getAttribute('data-id');
-                this.deleteUser(userId);
-            });
-        });
-    }
-    
-    async addUser(userData) {
-        try {
-            // Check if user is admin
-            if (!window.myEMSApp.user.isAdmin()) {
-                alert('Access denied. Admin privileges required.');
-                return;
-            }
-            
-            await ApiService.createUser(userData);
-            document.getElementById('add-user-modal').remove();
-            this.loadUsers();
-            alert('User added successfully!');
-        } catch (error) {
-            console.error('Error adding user:', error);
-            alert('Failed to add user: ' + error.message);
+
+    // Delegated delete
+    document.addEventListener('click', async (e) => {
+        const delBtn = e.target.closest('.delete-user');
+        if (delBtn) {
+            const id = delBtn.dataset.id || delBtn.closest('[data-id]')?.dataset.id;
+            if (!id) return alert('Missing user id.');
+            try { await ApiService.deleteUser(id); await renderList(); }
+            catch (err) { alert('Failed to delete user: ' + err.message); }
         }
-    }
-    
-    async editUser(userId) {
-        try {
-            // Check if user is admin
-            if (!window.myEMSApp.user.isAdmin()) {
-                alert('Access denied. Admin privileges required.');
-                return;
-            }
-            
-            const user = await ApiService.getUser(userId);
-            this.view.showEditUserForm(user);
-        } catch (error) {
-            console.error('Error loading user:', error);
-            alert('Failed to load user details');
-        }
-    }
-    
-    async updateUser(userData) {
-        try {
-            // Check if user is admin
-            if (!window.myEMSApp.user.isAdmin()) {
-                alert('Access denied. Admin privileges required.');
-                return;
-            }
-            
-            // Remove password field if empty
-            if (!userData.password) {
-                delete userData.password;
-            }
-            
-            await ApiService.updateUser(userData.id, userData);
-            document.getElementById('edit-user-modal').remove();
-            this.loadUsers();
-            alert('User updated successfully!');
-        } catch (error) {
-            console.error('Error updating user:', error);
-            alert('Failed to update user: ' + error.message);
-        }
-    }
-    
-    async deleteUser(userId) {
-        // Check if user is admin
-        if (!window.myEMSApp.user.isAdmin()) {
-            alert('Access denied. Admin privileges required.');
-            return;
-        }
-        
-        // Prevent self-deletion
-        if (userId === window.myEMSApp.user.id) {
-            alert('You cannot delete your own account.');
-            return;
-        }
-        
-        if (confirm('Are you sure you want to delete this user? This action cannot be undone.')) {
+    });
+
+    // support Add/Edit user form
+    const userForm = document.getElementById('userForm');
+    if (userForm) {
+        userForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = $('#userId')?.value || '';
+            const payload = {
+                name: $('#userName')?.value.trim() || '',
+                username: $('#userUsername')?.value.trim() || '',
+                email: $('#userEmail')?.value.trim() || '',
+                role: $('#userRole')?.value || 'user',
+            };
             try {
-                await ApiService.deleteUser(userId);
-                this.loadUsers();
-                alert('User deleted successfully!');
-            } catch (error) {
-                console.error('Error deleting user:', error);
-                alert('Failed to delete user: ' + error.message);
-            }
-        }
+                if (id) await ApiService.updateUser(id, payload);
+                else await ApiService.createUser ? await ApiService.createUser(payload) : Promise.reject(new Error('createUser not implemented'));
+                await renderList();
+                if ($('#userModal')) $('#userModal').style.display = 'none';
+                userForm.reset();
+                if ($('#userId')) $('#userId').value = '';
+            } catch (err) { alert('Failed to save user: ' + err.message); }
+        });
     }
-    
-    showAddUserForm() {
-        // Check if user is admin
-        if (!window.myEMSApp.user.isAdmin()) {
-            alert('Access denied. Admin privileges required.');
-            return;
-        }
-        
-        this.view.showAddUserForm();
-    }
-}
+
+    window.UserController = {
+        loadUsers: renderList,
+        showAddUserForm: () => openFormWith(null),
+        refresh: renderList,
+    };
+})();
