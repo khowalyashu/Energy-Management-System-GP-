@@ -1,13 +1,20 @@
 const mongoose = require('mongoose');
 
-const connectDB = async () => {
-  try {
-    const conn = await mongoose.connect(process.env.MONGODB_URI);
-    console.log(`MongoDB Connected: ${conn.connection.host}`);
-  } catch (error) {
-    console.error('Error connecting to MongoDB:', error.message);
-    process.exit(1);
-  }
-};
+module.exports = async function connectDB() {
+  // Accept either env var; default to local "myems"
+  const uri =
+    process.env.MONGO_URI ||
+    process.env.MONGODB_URI ||
+    'mongodb://127.0.0.1:27017/myems';
 
-module.exports = connectDB;
+  if (typeof uri !== 'string' || !uri.trim()) {
+    throw new Error('Mongo connection URI is empty. Set MONGO_URI or MONGODB_URI.');
+  }
+
+  // Optional: tame deprecation warnings
+  mongoose.set('strictQuery', true);
+
+  // Connect (throws on failure)
+  const conn = await mongoose.connect(uri);
+  return conn; // caller can log host/name
+};
