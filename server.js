@@ -1,214 +1,84 @@
+// server.js (MongoDB mode)
 require('dotenv').config();
-const express = require('express');
+
 const path = require('path');
+const express = require('express');
 const cors = require('cors');
+const connectDB = require('./config/database');
 
 const app = express();
-const port = process.env.PORT || 3000;
+const PORT = Number(process.env.PORT) || 3000;
 
-// Middleware
+// default local connection if .env not present during dev
+process.env.MONGODB_URI =
+  process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/myems';
+
+// ---- middleware ----
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '1mb' }));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname)));
 
-// Serve frontend
-app.get('/', (req, res) => {
+// ---- health ----
+app.get('/api/health', (_req, res) => {
+  res.json({
+    ok: true,
+    env: process.env.NODE_ENV || 'development',
+    db: !!process.env.MONGODB_URI,
+    ts: new Date().toISOString(),
+  });
+});
+
+// ---- api routes ----
+app.use('/api/auth', require('./routes/auth'));
+app.use('/api/devices', require('./routes/devices'));
+app.use('/api/users', require('./routes/users'));
+app.use('/api/energy', require('./routes/energy'));   // mount once
+app.use('/api/reports', require('./routes/reports'));
+
+// ---- spa entry ----
+app.get('/', (_req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// Health check endpoint
-app.get('/api/health', (req, res) => {
-  res.json({ 
-    status: 'OK', 
-    message: 'Server is running',
-    timestamp: new Date().toISOString()
+// ---- error handler ----
+app.use((err, _req, res, _next) => {
+  console.error('[ERROR]', err);
+  res.status(err.status || 500).json({
+    message: err.message || 'Something went wrong',
+    status: err.status || 500,
   });
 });
 
-// Simple in-memory database simulation (for testing without MongoDB)
-let simulatedDB = {
-  users: [
-    {
-      _id: '1',
-      username: 'admin',
-      email: 'admin@myems.com',
-      name: 'Administrator',
-      role: 'admin',
-      preferences: {
-        notifications: true,
-        darkMode: false,
-        dataRefresh: 5
-      }
-    }
-  ],
-  devices: [
-    {
-      _id: '1',
-      name: 'Living Room Lights',
-      type: 'lighting',
-      powerRating: 100,
-      energyConsumption: 5.2,
-      status: 'active',
-      location: 'Living Room',
-      userId: '1'
-    },
-    {
-      _id: '2',
-      name: 'Kitchen HVAC',
-      type: 'heating',
-      powerRating: 1500,
-      energyConsumption: 28.3,
-      status: 'active',
-      location: 'Kitchen',
-      userId: '1'
-    }
-  ],
-  energyData: []
-};
+// ---- start (single start guard) ----
+let server;
+let started = false;
 
-// Simple auth endpoints (for testing without MongoDB)
-app.post('/api/auth/login', (req, res) => {
-  const { username, password } = req.body;
-  console.log('Login attempt:', username, password);
-  
-  if (username === 'admin' && password === 'password') {
-    res.json({
-      _id: '1',
-      username: 'admin',
-      email: 'admin@myems.com',
-      name: 'Administrator',
-      role: 'admin',
-      preferences: {
-        notifications: true,
-        darkMode: false,
-        dataRefresh: 5
-      },
-      token: 'mock-jwt-token-for-testing'
+async function start() {
+  if (started) return server;
+  started = true;
+
+  try {
+    const mongoose = await connectDB();
+    const { host, name } = mongoose.connection;
+    console.log(`MongoDB Connected: ${host}`);
+    console.log(`MongoDB DB Name: ${name}`);
+
+    server = app.listen(PORT, () => {
+      console.log(`MyEMS server running at http://localhost:${PORT}`);
+      console.log('Mode: MongoDB (live CRUD via /api/*)');
     });
-  } else {
-    res.status(401).json({ message: 'Invalid credentials' });
+
+    return server;
+  } catch (err) {
+    console.error('Failed to connect DB:', err?.message || err);
+    process.exit(1);
   }
-});
+}
 
-// Simple data endpoints (for testing without MongoDB)
-app.get('/api/devices', (req, res) => {
-  res.json(simulatedDB.devices);
-});
+// auto-start only when executed directly
+if (require.main === module) {
+  start();
+}
 
-app.get('/api/energy/stats', (req, res) => {
-  res.json({
-    totalConsumption: 243.4,
-    totalCost: 27.34,
-    avgConsumption: 10.14,
-    avgCost: 1.14
-  });
-});
-
-// Get energy data
-app.get('/api/energy', (req, res) => {
-  // Generate sample energy data
-  const energyData = [];
-  const now = new Date();
-  
-  for (let i = 0; i < 24; i++) {
-    const timestamp = new Date(now);
-    timestamp.setHours(now.getHours() - 23 + i);
-    
-    energyData.push({
-      timestamp,
-      consumption: 0.5 + Math.random() * 2,
-      cost: (0.5 + Math.random() * 2) * 0.12,
-      deviceId: i % 2 === 0 ? '1' : '2',
-      deviceType: i % 2 === 0 ? 'lighting' : 'heating',
-      userId: '1'
-    });
-  }
-  
-  res.json(energyData);
-});
-
-// Get users
-app.get('/api/users', (req, res) => {
-  res.json(simulatedDB.users);
-});
-
-// Generate report
-app.post('/api/reports/generate', (req, res) => {
-  const { type } = req.body;
-  const now = new Date();
-  
-  let period;
-  switch (type) {
-    case 'daily':
-      period = now.toDateString();
-      break;
-    case 'weekly':
-      period = `Week of ${new Date(now.setDate(now.getDate() - 7)).toDateString()}`;
-      break;
-    case 'monthly':
-      period = now.toLocaleString('default', { month: 'long', year: 'numeric' });
-      break;
-    case 'yearly':
-      period = now.getFullYear().toString();
-      break;
-    default:
-      period = now.toDateString();
-  }
-  
-  const report = {
-    _id: Date.now().toString(),
-    type,
-    period,
-    data: [],
-    totalConsumption: 243.4,
-    totalCost: 27.34,
-    userId: '1',
-    generatedAt: new Date()
-  };
-  
-  // Generate sample data
-  for (let i = 0; i < 10; i++) {
-    report.data.push({
-      timestamp: new Date(now.getTime() - i * 3600000),
-      consumption: 1 + Math.random() * 3,
-      cost: (1 + Math.random() * 3) * 0.12,
-      deviceType: ['lighting', 'heating', 'electronics'][i % 3]
-    });
-  }
-  
-  res.status(201).json(report);
-});
-
-// Get reports
-app.get('/api/reports', (req, res) => {
-  res.json([]);
-});
-
-// Update profile
-app.put('/api/auth/profile', (req, res) => {
-  res.json({
-    _id: '1',
-    username: 'admin',
-    email: req.body.email || 'admin@myems.com',
-    name: req.body.name || 'Administrator',
-    role: 'admin',
-    preferences: {
-      notifications: true,
-      darkMode: false,
-      dataRefresh: 5
-    }
-  });
-});
-
-// Error handling middleware
-app.use((error, req, res, next) => {
-  console.error(error.stack);
-  res.status(500).json({ message: 'Something went wrong!' });
-});
-
-// Start server without MongoDB connection
-app.listen(port, () => {
-  console.log(`MyEMS server running at http://localhost:${port}`);
-  console.log('Using simulated database (MongoDB not required)');
-  console.log('Login with: username=admin, password=password');
-});
+module.exports = { app, start };
