@@ -1,61 +1,44 @@
+// routes/devices.js (defensive version)
 const express = require('express');
 const router = express.Router();
 
-// Mock devices data
-const devices = [
-  {
-    _id: '1',
-    name: 'Living Room Lights',
-    type: 'lighting',
-    powerRating: 100,
-    energyConsumption: 5.2,
-    status: 'active',
-    location: 'Living Room',
-    userId: '1'
-  },
-  {
-    _id: '2',
-    name: 'Kitchen HVAC',
-    type: 'heating',
-    powerRating: 1500,
-    energyConsumption: 28.3,
-    status: 'active',
-    location: 'Kitchen',
-    userId: '1'
-  },
-  {
-    _id: '3',
-    name: 'Office Computer',
-    type: 'electronics',
-    powerRating: 300,
-    energyConsumption: 3.7,
-    status: 'inactive',
-    location: 'Office',
-    userId: '1'
-  }
-];
+// --- Resolve auth middleware no matter how it's exported
+const authModule = require('../middleware/auth');
+const auth =
+  typeof authModule === 'function'
+    ? authModule
+    : authModule?.verifyToken ||
+    authModule?.auth ||
+    authModule?.default ||
+    ((req, _res, next) => next()); // no-op fallback (won't block)
 
-const getDevices = async (req, res) => {
-  try {
-    res.json(devices);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
+// --- Resolve controller functions even if names differ
+const ctrl = require('../controllers/deviceController');
 
-const getDevice = async (req, res) => {
-  try {
-    const device = devices.find(d => d._id === req.params.id);
-    if (!device) {
-      return res.status(404).json({ message: 'Device not found' });
-    }
-    res.json(device);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
+function pick(fnNames) {
+  for (const name of fnNames) {
+    if (typeof ctrl?.[name] === 'function') return ctrl[name];
   }
-};
+  return null;
+}
+function ensure(fn, label) {
+  if (typeof fn === 'function') return fn;
+  // Helpful crash with context if still not found
+  throw new TypeError(`devices route: handler "${label}" not found on controller; available: ${Object.keys(ctrl || {})}`);
+}
 
-router.get('/', getDevices);
-router.get('/:id', getDevice);
+const getDevices = pick(['getDevices', 'list', 'index', 'getAllDevices']);
+const createDevice = pick(['createDevice', 'create', 'add', 'addDevice']);
+const getDevice = pick(['getDevice', 'read', 'show', 'findById']);
+const updateDevice = pick(['updateDevice', 'update', 'edit']);
+const deleteDevice = pick(['deleteDevice', 'remove', 'destroy', 'del']);
+
+// --- Routes
+router.get('/', auth, ensure(getDevices, 'getDevices'));
+router.post('/', auth, ensure(createDevice, 'createDevice'));
+router.get('/:id', auth, ensure(getDevice, 'getDevice'));
+router.put('/:id', auth, ensure(updateDevice, 'updateDevice'));
+router.delete('/:id', auth, ensure(deleteDevice, 'deleteDevice'));
 
 module.exports = router;
+

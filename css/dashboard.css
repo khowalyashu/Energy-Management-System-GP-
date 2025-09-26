@@ -503,6 +503,8 @@ body.dark-mode .user-detail .detail-value {
     color: #7f8c8d;
 }
 
+
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .stats-grid,
