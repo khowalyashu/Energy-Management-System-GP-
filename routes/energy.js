@@ -37,6 +37,7 @@ router.get('/stats', async (req, res, next) => {
   }
 });
 
+
 // GET /api/energy/by-type  (bottom “Energy Consumption by Device Type” tiles)
 router.get('/by-type', async (req, res, next) => {
   try {
