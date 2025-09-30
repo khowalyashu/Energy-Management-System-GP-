@@ -12,7 +12,7 @@ const auth =
     authModule?.default ||
     ((req, _res, next) => next()); // no-op fallback (won't block)
 
-// --- Resolve controller functions even if names differ
+// --- Resolve controller functions even if names d iffer
 const ctrl = require('../controllers/deviceController');
 
 function pick(fnNames) {
