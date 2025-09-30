@@ -1,0 +1,17 @@
+services:
+  mongo:
+    image: mongo:6
+    restart: unless-stopped
+    ports: ["27017:27017"]
+    volumes: ["mongo_data:/data/db"]
+
+  app:
+    image: ems-app:latest
+    depends_on:
+      - mongo
+    ports: ["3000:3000"]
+    environment:
+      MONGO_URL: mongodb://mongo:27017/ems
+
+volumes:
+  mongo_data:
