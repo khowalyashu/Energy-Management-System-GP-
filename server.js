@@ -11,7 +11,7 @@ const PORT = Number(process.env.PORT) || 3000;
 
 // default local connection if .env not present during dev
 process.env.MONGODB_URI =
-  process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/myems';
+process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/myems';
 
 // ---- middleware ----
 app.use(cors());
@@ -28,6 +28,7 @@ app.get('/api/health', (_req, res) => {
     ts: new Date().toISOString(),
   });
 });
+// app.use("/api/student", require("./routes/student"));
 
 // ---- api routes ----
 app.use('/api/auth', require('./routes/auth'));
@@ -64,7 +65,7 @@ async function start() {
     console.log(`MongoDB Connected: ${host}`);
     console.log(`MongoDB DB Name: ${name}`);
 
-    server = app.listen(PORT, () => {
+    server = app.listen(PORT,"0.0.0.0", () => {
       console.log(`MyEMS server running at http://localhost:${PORT}`);
       console.log('Mode: MongoDB (live CRUD via /api/*)');
     });
