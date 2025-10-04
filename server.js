@@ -5,6 +5,7 @@ const path = require('path');
 const express = require('express');
 const cors = require('cors');
 const connectDB = require('./config/database');
+const studentRoute = require('./routes/student');
 
 const app = express();
 const PORT = Number(process.env.PORT) || 3000;
@@ -36,6 +37,9 @@ app.use('/api/devices', require('./routes/devices'));
 app.use('/api/users', require('./routes/users'));
 app.use('/api/energy', require('./routes/energy'));   // mount once
 app.use('/api/reports', require('./routes/reports'));
+
+app.use('/api/student', studentRoute); // Student details route
+
 
 // ---- spa entry ----
 app.get('/', (_req, res) => {

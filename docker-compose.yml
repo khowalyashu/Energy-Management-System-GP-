@@ -1,17 +1,26 @@
+version: "3.9"
 services:
-  mongo:
-    image: mongo:6
-    restart: unless-stopped
-    ports: ["27017:27017"]
-    volumes: ["mongo_data:/data/db"]
-
-  app:
-    image: ems-app:latest
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: myems-api
+    env_file:
+      - .env
+    ports:
+      - "${PORT:-3000}:3000"
     depends_on:
       - mongo
-    ports: ["3000:3000"]
-    environment:
-      MONGO_URL: mongodb://mongo:27017/ems
+    restart: unless-stopped
+
+  mongo:
+    image: mongo:7
+    container_name: myems-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    restart: unless-stopped
 
 volumes:
   mongo_data:
