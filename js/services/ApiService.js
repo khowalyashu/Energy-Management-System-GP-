@@ -25,6 +25,15 @@
     } catch {}
   }
 
+  function isAuthenticated() {
+    return !!token;
+  }
+  function logout() {
+    setToken(null);
+    try { localStorage.removeItem('user'); } catch {}
+    return { ok: true };
+  }
+
   // --------------- localStorage helpers ---------------
   function readLS(key, def = []) {
     try {
@@ -65,13 +74,7 @@
   // --------------- request helper (Mongo-first) ---------------
   async function request(path, { method = 'GET', body } = {}) {
     const headers = { 'Content-Type': 'application/json' };
-
-    if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
-    } else {
-      // Helpful for dev while auth is not wired everywhere.
-      headers['x-dev-bypass'] = 'true';
-    }
+    if (token) headers['Authorization'] = `Bearer ${token}`;
 
     const res = await fetch(`${BASE}${path}`, {
       method,
@@ -99,7 +102,6 @@
     if (!p || typeof p !== 'object') return {};
     const out = { ...p };
 
-    // Map UI/local fields to schema names
     if (out.power !== undefined && out.powerRating === undefined) {
       out.powerRating = Number(out.power) || 0;
     }
@@ -115,10 +117,9 @@
     if (out.location === undefined) out.location = '';
     if (out.userId === undefined) out.userId = '1';
 
-    // Remove UI-only keys so strict schemas don't choke
-    delete out.power;       // we now send powerRating
-    delete out.deviceType;  // we now send type
-    delete out.active;      // we now send status
+    delete out.power;
+    delete out.deviceType;
+    delete out.active;
 
     return out;
   }
@@ -140,15 +141,13 @@
 
   // --------------- Auth ---------------
   async function login(username, password) {
-    try {
-      const data = await request('/auth/login', { method: 'POST', body: { username, password } });
-      if (data?.token) setToken(data.token);
-      return data || { ok: true };
-    } catch {
-      // mock success to keep the UI usable
-      setToken(null);
-      return { ok: true, token: null, user: { username: username || 'admin' } };
-    }
+    // Strict login: no mock success here. If it fails, we throw.
+    const data = await request('/auth/login', { method: 'POST', body: { username, password } });
+    if (!data?.token) throw new Error('Invalid credentials');
+    setToken(data.token);
+    // persist user if backend returns it
+    try { if (data.user) localStorage.setItem('user', JSON.stringify(data.user)); } catch {}
+    return data;
   }
 
   async function updateProfile(payload) {
@@ -207,15 +206,23 @@
     catch { return readLS(LS_KEYS.reports, []); }
   }
 
-  async function generateReport(type = 'daily') {
+  // type: 'daily' | 'weekly' | 'monthly' | 'yearly' | 'range'
+  // for 'range', pass options { from: 'YYYY-MM-DD', to: 'YYYY-MM-DD' }
+  async function generateReport(type = 'daily', options = {}) {
+    const body = { type, ...options };
     try {
-      return await request('/reports/generate', { method: 'POST', body: { type } });
+      return await request('/reports/generate', { method: 'POST', body });
     } catch {
+      // local fallback
       const list = readLS(LS_KEYS.reports, []);
       const now = new Date();
+      const periodStr =
+        type === 'range' && options?.from && options?.to
+          ? `${options.from} → ${options.to}`
+          : now.toDateString();
       const r = {
         _id: uid('rpt_'),
-        title: `${type[0].toUpperCase() + type.slice(1)} Report - ${now.toDateString()}`,
+        title: `${type[0].toUpperCase() + type.slice(1)} Report - ${periodStr}`,
         type,
         createdAt: now.toISOString(),
         totalConsumption: Number((Math.random() * 120 + 20).toFixed(2)),
@@ -331,7 +338,7 @@
   // --------------- export to window ---------------
   window.ApiService = {
     // auth
-    login, updateProfile,
+    login, updateProfile, logout, isAuthenticated,
     // dashboard
     stats, energy,
     // reports
