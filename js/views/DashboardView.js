@@ -7,12 +7,9 @@ const TYPE_ORDER = ['lighting', 'heating', 'cooling', 'appliances', 'electronics
 
 /**
  * Update the text values in the small tiles at the bottom.
- * This supports either:
- *   a) your original IDs:   #lighting-value, #heating-value, ...
- *   b) the class+data hook: .device-type-item[data-type="lighting"] .device-type-value
- */
+ * */
 function updateDeviceTypeTiles(byType = {}) {
-  // a) by fixed IDs (your current markup)
+  // a) by fixed IDs
   const idMap = {
     lighting:    '#lighting-value',
     heating:     '#heating-value',
@@ -26,7 +23,7 @@ function updateDeviceTypeTiles(byType = {}) {
     if (el) el.textContent = `${Number(byType[type] || 0).toFixed(1)} kWh`;
   });
 
-  // b) optional: by data-type hooks (safe no-op if not present)
+  // b) by data-type hooks 
   TYPE_ORDER.forEach((type) => {
     const node = document.querySelector(`.device-type-item[data-type="${type}"] .device-type-value`);
     if (node) node.textContent = `${Number(byType[type] || 0).toFixed(1)} kWh`;
@@ -34,8 +31,7 @@ function updateDeviceTypeTiles(byType = {}) {
 }
 
 /**
- * Update the donut chart if it already exists on the page.
- * We DO NOT create or alter the chart config — only its data.
+ * Update the donut chart 
  */
 function updateDonutChart(byType = {}) {
   if (!window.deviceChart) return;
@@ -50,16 +46,14 @@ function updateDonutChart(byType = {}) {
 }
 
 /**
- * Render the device-type numbers using the same selectors you already had.
- * (Kept for backwards compatibility; calls both chart + tiles.)
+ * Render the device-type numbers using the same selectors 
  */
 function renderByType(byType = {}) {
   updateDeviceTypeTiles(byType);
   updateDonutChart(byType);
 }
 
-// If you already have a line-chart rendering function, we’ll use it.
-// Otherwise, this is a harmless no-op.
+// line-chart rendering function
 function renderSeries(series = []) {
   if (typeof window.renderEnergySeries === 'function') {
     window.renderEnergySeries(series);
@@ -115,17 +109,15 @@ async function refreshDeviceTypeSummary() {
 }
 
 // ───────────────────────────────────────────────────────────
-// 3) Bootstrap (no top-level await)
+// 3) Bootstrap 
 // ───────────────────────────────────────────────────────────
 
 (async function initDashboardView() {
   // Kick off primary load (series + donut + tiles)
   await loadDashboardEnergy();
 
-  // If the donut is created slightly later in your flow,
-  // this ensures the tiles sync once it’s ready.
   setTimeout(refreshDeviceTypeSummary, 100);
 
-  // Expose a manual refresher if you change data elsewhere
+  // Expose a manual refresher for change of data elsewhere
   window.refreshDeviceTypeSummary = refreshDeviceTypeSummary;
 })();
