@@ -28,7 +28,7 @@ app.get('/api/health', (_req, res) => {
     ts: new Date().toISOString(),
   });
 });
-// app.use("/api/student", require("./routes/student"));
+app.use("/api/student", require("./routes/student"));
 
 // ---- api routes ----
 app.use('/api/auth', require('./routes/auth'));
