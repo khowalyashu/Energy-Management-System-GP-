@@ -5,7 +5,7 @@ const router = express.Router();
 const auth = require('../middleware/auth');
 const Users = require('../controllers/userController');
 
-// Protect all routes (dev bypass keeps working)
+// Protect all routes
 router.use(auth);
 
 // CRUD

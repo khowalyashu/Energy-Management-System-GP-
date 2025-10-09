@@ -1,0 +1,501 @@
+name,type,powerRating,location,status,energyConsumption,notes
+Vent Fan 0OX,cooling,300,Warehouse B,inactive,22.727,
+Tube Light U73,lighting,100,East Wing,active,4.356,New installation
+Water Heater WKJ,heating,2000,Conference 1,active,125.887,
+Switch FZN,electronics,450,Warehouse B,active,33.862,Check wiring
+HVAC Z0X,heating,1500,Conference 1,active,25.984,
+Vending Machine X92,appliances,350,Reception,active,13.118,
+CNC Controller PAC,electronics,450,Cafeteria,active,26.534,New installation
+IoT Gateway 2BA,electronics,450,Manufacturing Line 1,active,21.913,High usage device
+Vent Fan 81M,cooling,1200,Main Office,inactive,37.69,
+Washer 9D0,appliances,120,Main Office,active,4.89,
+Monitor KQ5,electronics,600,Cafeteria,active,26.391,
+Router 3V7,electronics,450,Server Room,active,7.824,
+Radiator EZQ,heating,1500,Cafeteria,active,88.058,Scheduled for maintenance Q4
+Radiator V2L,heating,3000,West Wing,active,16.346,Scheduled for maintenance Q4
+Vent Fan UVW,cooling,900,North Wing,active,15.29,
+IoT Gateway BWF,electronics,45,Reception,inactive,1.385,Legacy unit
+Vending Machine 0Z1,appliances,350,Manufacturing Line 1,active,24.499,
+Router TNJ,electronics,300,North Wing,inactive,18.703,
+Washer KGW,appliances,80,Reception,active,5.227,
+Evaporator UNG,cooling,1200,R&D Lab,inactive,27.383,
+Dishwasher JTQ,appliances,120,South Wing,active,5.611,
+AC Unit GB7,cooling,1200,Server Room,inactive,94.552,
+Street Light P8M,lighting,80,Reception,active,2.304,
+Boiler E3N,heating,1500,Warehouse B,active,74.684,High usage device
+CNC Controller AWC,electronics,45,Conference 2,active,3.473,Legacy unit
+Workstation W6C,electronics,300,Server Room,active,22.927,
+Evaporator VH9,cooling,1200,Conference 1,active,76.329,
+Water Heater RF8,heating,1500,Roof,active,91.321,
+Refrigerator L0U,appliances,900,Conference 2,active,68.605,
+Vent Fan K3H,cooling,2000,East Wing,inactive,62.647,
+Evaporator YZ5,cooling,1200,Warehouse A,active,23.664,
+HVAC OSM,heating,2000,East Wing,inactive,80.015,
+Coffee Machine OSZ,appliances,120,Parking Level -1,active,0.934,
+Boiler 20M,heating,2000,East Wing,inactive,66.685,
+Track Light AW0,lighting,18,Conference 2,active,0.754,New installation
+Downlight FDI,lighting,12,Conference 2,active,0.248,
+Boiler LLF,heating,1200,South Wing,inactive,94.577,Legacy unit
+AC Unit YYV,cooling,2000,Conference 2,active,156.179,High usage device
+3D Printer M04,electronics,450,Manufacturing Line 1,active,7.788,
+Microwave 57M,appliances,500,Manufacturing Line 1,active,21.503,
+Switch CZD,electronics,300,Roof,active,10.765,
+Chiller SJ6,cooling,1200,Cafeteria,active,71.51,
+AC Unit P2N,cooling,1600,Warehouse A,inactive,35.633,
+Chiller Y6Y,cooling,1600,Conference 1,active,61.896,
+Radiator LAA,heating,2000,Parking Level -2,active,70.701,
+Water Heater RL2,heating,800,Manufacturing Line 1,active,4.046,
+AC Unit 7N4,cooling,1200,North Wing,inactive,71.157,
+Tube Light I1Q,lighting,48,Admin Wing,active,2.673,
+Floodlight 7VZ,lighting,36,Reception,active,0.385,
+Vent Fan F0M,cooling,1600,Server Room,active,19.022,
+IoT Gateway MID,electronics,45,Conference 2,active,1.257,
+Monitor PKO,electronics,150,South Wing,active,3.729,
+Monitor 9OY,electronics,600,Warehouse B,active,26.454,
+Heat Pump XCK,heating,3000,Manufacturing Line 1,active,65.831,
+Boiler OWQ,heating,800,Warehouse B,active,58.981,New installation
+Water Heater IMV,heating,1200,Roof,active,37.057,High usage device
+HVAC DZW,heating,1200,Cafeteria,inactive,52.74,High usage device
+Downlight FVH,lighting,100,R&D Lab,active,6.278,New installation
+Monitor SZ7,electronics,150,QA Lab,inactive,6.609,Scheduled for maintenance Q4
+Dishwasher YV0,appliances,700,East Wing,active,50.085,
+Vending Machine 8IV,appliances,80,Admin Wing,active,6.161,
+Panel Light VZC,lighting,100,Admin Wing,active,4.832,
+Switch FUF,electronics,45,Conference 1,active,3.08,
+LED Strip 6V8,lighting,60,Warehouse B,active,0.545,High usage device
+Microwave 2JI,appliances,900,North Wing,active,67.775,
+Monitor HG0,electronics,150,Reception,active,11.506,New installation
+Dryer BFW,appliances,900,Main Office,inactive,48.54,
+Heat Pump WX4,heating,2000,Warehouse B,active,74.125,
+Monitor 7V1,electronics,90,Server Room,active,4.953,New installation
+Evaporator HU2,cooling,1600,Server Room,active,92.182,
+CNC Controller X2Y,electronics,200,QA Lab,active,9.393,
+Evaporator NB2,cooling,900,South Wing,active,63.045,
+Heat Pump A99,heating,3000,North Wing,active,152.36,
+Monitor RZX,electronics,200,Warehouse B,active,5.439,
+Monitor B3Y,electronics,450,Manufacturing Line 2,active,5.57,
+Vent Fan BAM,cooling,1200,Admin Wing,active,55.056,
+Street Light IWQ,lighting,24,R&D Lab,active,0.89,Scheduled for maintenance Q4
+Tube Light BCQ,lighting,100,Main Office,active,6.081,
+Dishwasher MYE,appliances,120,East Wing,active,7.371,
+Water Heater CDE,heating,1200,R&D Lab,active,12.011,
+Radiator PKJ,heating,800,Server Room,active,11.396,New installation
+Boiler 8I3,heating,2000,Parking Level -2,inactive,12.216,
+HVAC VX7,heating,2000,Warehouse A,active,138.058,
+Track Light X5I,lighting,80,Server Room,active,6.16,
+Radiator NN2,heating,2000,Warehouse A,active,24.689,
+Downlight CF3,lighting,36,Manufacturing Line 1,active,1.874,Legacy unit
+Track Light TGB,lighting,100,Main Office,active,7.603,Check wiring
+Dishwasher UB8,appliances,200,West Wing,active,4.31,New installation
+Floodlight 99X,lighting,80,East Wing,inactive,4.732,Check wiring
+Vending Machine B16,appliances,80,Server Room,active,3.913,Legacy unit
+Coffee Machine FQ4,appliances,120,West Wing,inactive,2.171,High usage device
+Switch 6VG,electronics,450,Manufacturing Line 1,inactive,28.641,
+Evaporator NUW,cooling,1200,Main Office,active,27.139,
+Microwave AQ9,appliances,900,Cafeteria,active,52.82,
+Boiler WEX,heating,1500,Manufacturing Line 1,active,66.997,
+Radiator QR0,heating,800,Cafeteria,active,38.402,
+Cooling Unit GLD,cooling,450,Cafeteria,active,15.464,
+Water Heater A34,heating,1500,Conference 1,active,73.351,
+Radiator HJX,heating,3000,Admin Wing,active,63.599,
+Track Light F69,lighting,12,R&D Lab,active,0.289,
+Evaporator TW2,cooling,600,R&D Lab,active,13.106,
+AC Unit 19R,cooling,600,West Wing,active,17.214,
+LED Strip ZYU,lighting,60,Admin Wing,active,0.613,
+Microwave PWH,appliances,80,Conference 2,active,3.458,
+Boiler EGV,heating,800,Manufacturing Line 1,active,34.353,
+HVAC RWL,heating,1500,Main Office,active,107.801,Check wiring
+Dryer 42T,appliances,80,Manufacturing Line 2,inactive,3.275,Scheduled for maintenance Q4
+LED Strip UZB,lighting,60,Parking Level -1,active,3.797,
+Downlight NDR,lighting,100,Main Office,active,1.438,
+3D Printer Y2C,electronics,450,Roof,active,7.335,
+IoT Gateway HTU,electronics,600,Manufacturing Line 2,inactive,11.196,
+Chiller KE1,cooling,450,Admin Wing,active,14.92,
+CNC Controller F97,electronics,450,Main Office,inactive,13.157,
+Downlight K3A,lighting,100,South Wing,active,2.622,Legacy unit
+LED Strip DN3,lighting,80,Roof,active,5.245,Check wiring
+Vending Machine UG0,appliances,120,Manufacturing Line 1,active,5.909,Check wiring
+Monitor EGM,electronics,450,Admin Wing,active,9.737,
+CNC Controller 0U9,electronics,90,Cafeteria,active,4.747,
+Floodlight 12L,lighting,18,Parking Level -1,inactive,0.807,Scheduled for maintenance Q4
+Vent Fan T94,cooling,600,Manufacturing Line 2,inactive,15.456,Check wiring
+Boiler 8JK,heating,1500,Main Office,active,45.578,
+Washer 6FS,appliances,700,Manufacturing Line 1,active,49.422,
+HVAC 7AD,heating,2500,Manufacturing Line 2,active,16.74,Legacy unit
+Coffee Machine 68B,appliances,350,Warehouse B,active,26.504,Legacy unit
+Vent Fan C7X,cooling,1600,QA Lab,active,64.098,New installation
+Panel Light X1N,lighting,48,Conference 1,active,1.333,
+LED Strip XMG,lighting,18,Roof,active,0.896,Check wiring
+Washer XXR,appliances,200,West Wing,active,7.634,
+Dryer V9E,appliances,700,South Wing,active,40.771,Legacy unit
+Downlight GVD,lighting,36,Roof,active,1.911,New installation
+Workstation GJX,electronics,45,R&D Lab,active,3.461,
+Refrigerator AF7,appliances,200,Server Room,active,3.122,
+Evaporator JN0,cooling,450,Warehouse B,active,5.386,
+Router MUX,electronics,600,QA Lab,active,36.718,
+Heat Pump 200,heating,800,Reception,active,29.346,
+IoT Gateway B47,electronics,450,Manufacturing Line 2,active,28.337,
+Radiator NNJ,heating,1500,Admin Wing,active,75.087,
+Washer LVL,appliances,200,Warehouse A,active,7.288,
+Dishwasher TK6,appliances,500,Main Office,active,8.983,
+3D Printer 36H,electronics,45,Manufacturing Line 1,active,1.352,
+LED Strip 4XD,lighting,60,West Wing,active,1.626,
+Vent Fan PMC,cooling,300,West Wing,active,23.578,High usage device
+Cooling Unit OD5,cooling,300,Conference 1,active,17.324,Check wiring
+Chiller T3C,cooling,1200,Parking Level -2,active,76.53,Legacy unit
+Router SUZ,electronics,200,Parking Level -2,active,9.492,
+Microwave RR3,appliances,900,Conference 1,inactive,22.24,Scheduled for maintenance Q4
+Vending Machine AZP,appliances,900,Roof,inactive,40.886,New installation
+Water Heater AXW,heating,1500,Parking Level -1,inactive,101.513,
+Street Light 5WO,lighting,12,Parking Level -2,inactive,0.411,
+Tube Light 7JV,lighting,100,Parking Level -1,active,5.945,
+Dryer MQ8,appliances,500,QA Lab,active,7.779,New installation
+Refrigerator U0K,appliances,200,Server Room,active,11.926,Legacy unit
+Coffee Machine CH8,appliances,900,QA Lab,active,39.823,New installation
+Workstation A9Y,electronics,150,Main Office,inactive,7.116,
+Monitor 1VC,electronics,600,Conference 1,active,27.968,
+Chiller 89I,cooling,300,QA Lab,active,17.288,New installation
+Monitor BZ9,electronics,90,Manufacturing Line 2,active,0.637,
+Monitor EW7,electronics,200,R&D Lab,active,3.088,
+Boiler Z17,heating,3000,South Wing,inactive,49.587,
+AC Unit ZL9,cooling,450,QA Lab,active,24.252,
+Chiller WO4,cooling,1200,R&D Lab,active,16.037,Check wiring
+Cooling Unit 1YN,cooling,300,South Wing,inactive,20.628,
+Dryer XJH,appliances,120,Parking Level -1,active,3.895,
+Coffee Machine MX7,appliances,200,South Wing,inactive,2.419,
+Boiler KB2,heating,2500,Cafeteria,active,41.468,Scheduled for maintenance Q4
+Radiator 8D0,heating,2000,Warehouse A,active,134.309,
+Radiator 3OD,heating,3000,Main Office,active,238.926,
+HVAC M06,heating,1500,Admin Wing,active,56.534,
+Monitor 667,electronics,600,South Wing,inactive,17.366,
+Dishwasher RDP,appliances,700,Manufacturing Line 1,active,8.184,High usage device
+Workstation UYE,electronics,450,Roof,active,25.598,Scheduled for maintenance Q4
+Panel Light UQA,lighting,48,East Wing,inactive,3.786,
+Monitor 8HB,electronics,600,Reception,active,38.328,Legacy unit
+Water Heater 3EP,heating,800,Server Room,active,16.536,Scheduled for maintenance Q4
+Microwave KDD,appliances,700,Admin Wing,active,53.302,New installation
+Heat Pump WBM,heating,2500,Parking Level -2,active,25.018,
+Evaporator J6P,cooling,900,Warehouse A,active,24.183,High usage device
+Cooling Unit KJP,cooling,1200,Reception,active,71.616,
+Radiator ELV,heating,1500,QA Lab,active,47.213,
+IoT Gateway YUW,electronics,450,Main Office,active,21.189,
+Panel Light 5GO,lighting,24,Reception,active,0.307,High usage device
+Washer 26S,appliances,120,Conference 2,active,5.878,
+Switch FI4,electronics,200,Warehouse B,active,13.338,New installation
+Chiller M73,cooling,450,R&D Lab,active,15.66,Scheduled for maintenance Q4
+Evaporator IFK,cooling,900,Manufacturing Line 2,inactive,48.173,High usage device
+AC Unit FV3,cooling,2000,Main Office,active,85.859,
+Cooling Unit D1N,cooling,2000,Manufacturing Line 2,active,128.513,
+HVAC EJQ,heating,1500,North Wing,active,59.563,
+Vending Machine 7HV,appliances,500,Cafeteria,inactive,36.735,Check wiring
+Switch QJW,electronics,600,R&D Lab,active,35.339,New installation
+LED Strip U3F,lighting,12,Warehouse A,active,0.409,
+Track Light AKI,lighting,18,Server Room,inactive,1.071,Scheduled for maintenance Q4
+CNC Controller XDJ,electronics,90,Server Room,inactive,2.629,
+Water Heater 4ZH,heating,2500,Parking Level -1,active,65.367,
+Coffee Machine E9N,appliances,500,Parking Level -2,active,12.395,Check wiring
+Downlight SLK,lighting,60,R&D Lab,active,3.099,
+Downlight VXY,lighting,18,QA Lab,active,1.149,
+Vending Machine 4GA,appliances,200,Parking Level -2,active,4.033,
+Dryer KPL,appliances,900,R&D Lab,active,10.186,
+IoT Gateway YPG,electronics,90,Roof,active,4.068,
+Tube Light 2QF,lighting,48,Conference 2,active,2.523,
+Street Light 7H8,lighting,18,Conference 1,inactive,1.392,Legacy unit
+Street Light 6Q2,lighting,80,North Wing,active,3.779,
+Water Heater HOP,heating,1200,Cafeteria,active,39.48,
+LED Strip YN0,lighting,24,Manufacturing Line 1,active,0.374,
+AC Unit 1D3,cooling,1200,Parking Level -2,active,30.572,
+IoT Gateway ON7,electronics,45,Warehouse B,active,0.403,
+Heat Pump 2UP,heating,3000,Roof,active,153.885,New installation
+Water Heater 3AF,heating,2500,Reception,active,54.383,
+LED Strip STP,lighting,36,East Wing,inactive,0.839,
+Boiler CZ0,heating,2500,Manufacturing Line 1,active,34.434,
+Radiator AFT,heating,1200,Conference 2,active,73.484,
+HVAC 2R1,heating,800,Conference 1,active,37.049,High usage device
+Radiator V5U,heating,3000,Reception,active,21.638,High usage device
+Washer 0DW,appliances,200,Roof,active,5.953,
+Radiator ZGN,heating,1200,Warehouse B,active,74.485,
+HVAC 55Q,heating,3000,Conference 2,inactive,224.475,New installation
+Cooling Unit 1E1,cooling,1600,Roof,active,119.579,
+Tube Light 2QX,lighting,24,Admin Wing,inactive,0.296,Legacy unit
+3D Printer DX6,electronics,150,Admin Wing,inactive,5.394,
+Heat Pump HDT,heating,2500,Manufacturing Line 1,active,61.806,
+Coffee Machine GFC,appliances,500,Admin Wing,active,11.425,
+Vending Machine VKL,appliances,120,Server Room,active,4.417,
+Panel Light IVZ,lighting,18,Server Room,active,1.32,Legacy unit
+Floodlight XU3,lighting,100,Cafeteria,active,5.519,
+Dryer KAI,appliances,500,Manufacturing Line 2,active,26.09,
+Switch GUH,electronics,90,Conference 1,active,2.275,
+Track Light 9WM,lighting,12,Conference 1,inactive,0.559,Scheduled for maintenance Q4
+Workstation OD3,electronics,600,South Wing,active,30.4,
+Floodlight NVV,lighting,24,Warehouse B,active,1.248,
+Track Light 4LA,lighting,24,North Wing,active,1.14,Scheduled for maintenance Q4
+Dishwasher C1A,appliances,500,Manufacturing Line 1,active,7.935,Scheduled for maintenance Q4
+Cooling Unit 89R,cooling,1600,West Wing,active,62.05,
+Coffee Machine WOV,appliances,120,Warehouse B,inactive,9.554,New installation
+CNC Controller ALJ,electronics,300,Warehouse B,inactive,6.453,Check wiring
+Refrigerator EUE,appliances,350,Manufacturing Line 2,active,26.254,
+Dryer V48,appliances,200,Warehouse A,active,14.472,
+Dryer E0A,appliances,500,Conference 2,active,17.606,
+3D Printer Y86,electronics,600,Reception,inactive,44.795,
+Dryer 4JQ,appliances,200,Admin Wing,inactive,15.507,
+HVAC Y1G,heating,2500,Main Office,active,31.521,
+3D Printer 1R8,electronics,600,Manufacturing Line 2,active,4.121,Check wiring
+Floodlight 10F,lighting,24,Server Room,active,0.287,
+Cooling Unit R63,cooling,900,Server Room,active,42.175,Check wiring
+CNC Controller VQV,electronics,450,Parking Level -2,active,6.303,
+Panel Light YSB,lighting,60,Conference 2,active,0.666,Scheduled for maintenance Q4
+HVAC Y0C,heating,3000,Manufacturing Line 1,active,93.781,
+Chiller YIB,cooling,300,Admin Wing,active,18.748,
+Washer DO0,appliances,350,Cafeteria,active,2.141,Check wiring
+Dryer 2IM,appliances,700,Main Office,active,14.988,
+Panel Light XOC,lighting,100,Parking Level -1,active,7.062,
+Chiller 1I5,cooling,2000,Warehouse B,active,131.478,
+Coffee Machine DUE,appliances,900,Server Room,active,26.97,
+Floodlight 8EJ,lighting,18,R&D Lab,active,1.418,
+Router ZIJ,electronics,450,Parking Level -2,active,25.658,
+AC Unit WZ3,cooling,2000,East Wing,active,147.817,
+Evaporator E6D,cooling,900,Roof,active,31.826,
+Coffee Machine CNL,appliances,200,R&D Lab,active,13.286,
+Radiator 8C4,heating,1500,QA Lab,inactive,72.158,Legacy unit
+Street Light AB7,lighting,80,Parking Level -2,active,5.241,
+Washer L5X,appliances,350,North Wing,active,26.617,
+Dryer E1X,appliances,500,Reception,active,17.773,High usage device
+Workstation Q2G,electronics,600,North Wing,active,30.721,Check wiring
+Evaporator FBT,cooling,2000,East Wing,active,89.436,
+Vending Machine LKB,appliances,500,Admin Wing,inactive,7.141,
+Evaporator 10Q,cooling,1600,Parking Level -2,inactive,54.752,High usage device
+Downlight PEV,lighting,80,North Wing,active,6.397,
+Router V19,electronics,200,Main Office,inactive,1.396,
+Coffee Machine IXS,appliances,120,Reception,active,9.045,
+3D Printer 4F8,electronics,450,Admin Wing,active,21.372,
+Refrigerator Z0W,appliances,80,Warehouse B,inactive,1.817,
+HVAC KCB,heating,1200,Roof,active,54.376,
+Monitor K68,electronics,300,Manufacturing Line 1,active,11.268,
+Panel Light OV6,lighting,100,Admin Wing,active,7.032,Legacy unit
+Water Heater F5E,heating,1200,Admin Wing,active,24.099,
+Vending Machine C9X,appliances,120,North Wing,active,3.717,
+Dishwasher DSY,appliances,500,Admin Wing,inactive,25.151,
+Switch TJC,electronics,45,Parking Level -1,active,2.208,Check wiring
+Tube Light N50,lighting,24,Conference 1,active,1.821,
+IoT Gateway OZI,electronics,200,Admin Wing,inactive,2.147,
+Washer K09,appliances,80,QA Lab,active,4.268,
+CNC Controller L3V,electronics,200,Cafeteria,inactive,4.843,
+Router CHE,electronics,45,Manufacturing Line 2,active,2.183,
+Downlight WEI,lighting,36,Warehouse B,active,1.859,
+Cooling Unit Z1L,cooling,600,South Wing,active,18.087,
+IoT Gateway ZXA,electronics,300,South Wing,active,21.402,
+LED Strip STL,lighting,80,Conference 1,active,2.454,
+Cooling Unit EHD,cooling,2000,Parking Level -1,active,53.735,
+Street Light EMT,lighting,60,Main Office,inactive,1.651,
+Washer KCQ,appliances,350,Roof,active,26.14,
+Refrigerator JYK,appliances,200,Server Room,active,12.592,
+Vent Fan 4CF,cooling,1600,R&D Lab,inactive,13.699,
+Dishwasher 0YX,appliances,500,R&D Lab,active,11.867,New installation
+Tube Light 61T,lighting,48,Cafeteria,active,3.317,
+Workstation MN4,electronics,200,Main Office,active,1.719,High usage device
+Vent Fan O0F,cooling,600,Manufacturing Line 1,active,18.853,
+Monitor 7JZ,electronics,450,Reception,inactive,17.252,
+Radiator ULP,heating,1200,Admin Wing,active,78.208,
+Chiller FIC,cooling,2000,East Wing,active,131.098,Legacy unit
+Cooling Unit T07,cooling,600,Admin Wing,inactive,4.383,Check wiring
+AC Unit YHI,cooling,600,Main Office,active,25.135,High usage device
+Floodlight XVT,lighting,60,Warehouse B,inactive,2.282,
+Dryer 1YM,appliances,500,East Wing,active,10.637,Check wiring
+3D Printer O1T,electronics,600,North Wing,active,21.802,
+Floodlight BX8,lighting,24,R&D Lab,active,1.801,
+IoT Gateway V9E,electronics,150,Parking Level -1,active,2.351,
+Tube Light U2P,lighting,36,Manufacturing Line 1,active,0.925,
+IoT Gateway MFT,electronics,150,Manufacturing Line 2,inactive,1.314,
+Heat Pump F2R,heating,3000,Main Office,active,22.034,
+Workstation 3K3,electronics,600,Reception,active,21.375,
+3D Printer H4E,electronics,300,Admin Wing,active,4.289,
+Monitor N4L,electronics,450,Parking Level -1,inactive,16.103,High usage device
+Evaporator OE7,cooling,600,QA Lab,active,7.477,
+Evaporator 8O8,cooling,450,Conference 2,active,28.749,
+Dishwasher SJ9,appliances,500,South Wing,active,13.715,Check wiring
+Chiller KZD,cooling,450,East Wing,inactive,3.106,
+Vending Machine 33R,appliances,80,Cafeteria,active,3.81,
+CNC Controller 177,electronics,45,Conference 2,active,0.956,Check wiring
+Vent Fan MT3,cooling,600,Parking Level -1,active,26.16,
+Workstation 9WL,electronics,90,East Wing,active,5.56,
+Heat Pump 89Z,heating,800,South Wing,active,25.219,
+HVAC 2VD,heating,1500,Parking Level -2,active,107.433,
+Evaporator ED6,cooling,1200,Parking Level -1,inactive,71.089,Scheduled for maintenance Q4
+Vent Fan 57H,cooling,450,North Wing,active,29.723,New installation
+AC Unit FI7,cooling,900,Warehouse B,active,67.086,New installation
+Boiler WZO,heating,1500,Manufacturing Line 1,active,10.735,Scheduled for maintenance Q4
+Panel Light 8VW,lighting,12,Reception,active,0.839,
+LED Strip MCT,lighting,24,Parking Level -1,active,0.613,
+Tube Light MP5,lighting,60,Server Room,active,1.033,
+Vent Fan Q0R,cooling,900,Conference 2,active,44.411,
+LED Strip RP5,lighting,80,West Wing,active,1.0,
+Dishwasher IXS,appliances,350,Admin Wing,active,20.153,Scheduled for maintenance Q4
+Radiator U30,heating,1500,Conference 1,active,103.629,
+AC Unit OPI,cooling,1600,Warehouse B,active,72.903,
+Radiator JWS,heating,800,Manufacturing Line 1,inactive,53.707,
+Radiator 3CP,heating,3000,Warehouse A,active,183.885,
+Radiator 6RE,heating,1200,East Wing,active,21.231,
+Monitor LBH,electronics,90,South Wing,active,1.62,
+Switch ZGL,electronics,300,East Wing,active,18.924,
+LED Strip TQL,lighting,100,Manufacturing Line 1,active,7.97,
+Vending Machine ETO,appliances,700,Reception,active,51.461,
+Water Heater 24Y,heating,3000,Manufacturing Line 1,active,35.718,
+Washer 0UY,appliances,200,Reception,inactive,12.39,
+Cooling Unit 4V4,cooling,450,Main Office,active,25.534,
+Chiller 9MK,cooling,1600,Parking Level -2,active,51.18,
+LED Strip 0PT,lighting,100,Reception,active,2.655,
+Downlight FEU,lighting,18,Admin Wing,inactive,0.508,
+3D Printer 12O,electronics,200,South Wing,active,10.098,
+Tube Light G25,lighting,48,East Wing,active,1.017,
+Dishwasher 2CP,appliances,200,Roof,active,10.343,
+Radiator JW7,heating,1500,East Wing,active,8.673,
+Track Light 6RC,lighting,36,Warehouse A,active,0.956,
+Washer EFE,appliances,200,Warehouse B,active,13.353,Legacy unit
+HVAC ZQI,heating,2500,Manufacturing Line 2,inactive,113.623,
+Chiller GNW,cooling,900,Conference 1,active,19.825,High usage device
+Vent Fan PR0,cooling,1200,Manufacturing Line 2,active,67.64,
+CNC Controller MLS,electronics,300,South Wing,active,10.189,
+Cooling Unit T2D,cooling,1600,Roof,active,109.222,Legacy unit
+AC Unit TQV,cooling,600,Conference 2,active,20.903,
+Evaporator 6L2,cooling,300,Parking Level -2,active,10.939,
+Coffee Machine QGV,appliances,900,Cafeteria,inactive,18.052,
+Refrigerator 8XZ,appliances,700,Main Office,inactive,37.37,
+Cooling Unit IUK,cooling,1600,R&D Lab,active,95.926,High usage device
+Downlight I5M,lighting,18,Manufacturing Line 1,active,0.953,
+Boiler YAB,heating,1500,Conference 1,active,116.435,
+Vent Fan E9R,cooling,1200,Manufacturing Line 1,active,49.401,Check wiring
+Monitor Y6V,electronics,300,Parking Level -1,active,8.11,
+CNC Controller C30,electronics,450,Reception,active,5.461,
+Downlight PO3,lighting,80,Parking Level -1,inactive,3.088,
+Chiller DBA,cooling,300,Warehouse B,active,7.569,High usage device
+Dryer WNA,appliances,120,Warehouse A,active,9.434,
+Downlight E0V,lighting,48,North Wing,active,3.567,
+Downlight 5XY,lighting,36,Manufacturing Line 2,active,2.68,
+Vent Fan 5SD,cooling,900,Parking Level -2,active,43.83,Legacy unit
+Workstation 7NS,electronics,150,Manufacturing Line 1,active,11.319,
+3D Printer 2F4,electronics,600,Conference 2,active,3.323,
+LED Strip HVI,lighting,100,East Wing,active,1.198,
+Refrigerator B8K,appliances,80,Warehouse B,active,4.641,
+Radiator 2NA,heating,800,Warehouse A,active,41.486,
+3D Printer BTZ,electronics,450,South Wing,active,2.632,
+Street Light UT0,lighting,48,East Wing,inactive,2.432,
+Downlight WR9,lighting,100,Reception,active,7.359,High usage device
+LED Strip 7SW,lighting,60,Conference 2,active,1.269,Scheduled for maintenance Q4
+Water Heater 8OT,heating,2500,South Wing,active,78.448,
+Chiller 2JE,cooling,1200,East Wing,active,64.636,
+IoT Gateway CQ1,electronics,300,South Wing,active,7.282,
+Evaporator XDX,cooling,600,R&D Lab,active,47.125,
+Radiator 2ZR,heating,1500,Conference 2,inactive,36.654,
+Switch NN3,electronics,45,South Wing,active,2.947,High usage device
+Chiller X1G,cooling,1200,Manufacturing Line 1,active,63.653,
+Vending Machine YO2,appliances,200,North Wing,active,9.569,
+Monitor FQJ,electronics,200,Conference 2,active,2.296,
+Vent Fan TNA,cooling,2000,Server Room,active,52.288,
+IoT Gateway NNT,electronics,200,East Wing,active,15.693,
+AC Unit NIS,cooling,1200,East Wing,active,29.622,New installation
+Vending Machine Z8C,appliances,900,QA Lab,active,23.265,
+IoT Gateway XMF,electronics,90,Parking Level -1,inactive,2.217,
+Floodlight EM0,lighting,18,Cafeteria,active,0.436,
+HVAC 4Y5,heating,1500,Cafeteria,inactive,40.165,
+Cooling Unit ZFU,cooling,1200,Roof,inactive,60.088,New installation
+Washer F74,appliances,700,East Wing,active,23.438,
+Evaporator 14I,cooling,450,Reception,active,18.557,New installation
+Radiator VFL,heating,1200,Roof,active,81.089,
+Chiller THF,cooling,600,Reception,active,44.032,
+Monitor K9I,electronics,600,Manufacturing Line 1,active,26.419,
+Tube Light UK6,lighting,18,Parking Level -1,active,1.077,
+Tube Light 7OG,lighting,100,Warehouse B,active,3.065,
+Refrigerator 8Z1,appliances,900,Parking Level -2,inactive,27.609,
+3D Printer PK8,electronics,150,Main Office,inactive,1.133,
+3D Printer 4WL,electronics,150,West Wing,inactive,7.941,
+Chiller 7DQ,cooling,1200,Warehouse B,active,89.73,High usage device
+3D Printer 0KJ,electronics,600,East Wing,active,41.047,
+Vending Machine H5M,appliances,350,Admin Wing,inactive,23.95,Legacy unit
+Evaporator 0OI,cooling,600,QA Lab,inactive,15.025,
+Track Light BG7,lighting,36,Parking Level -1,inactive,0.493,High usage device
+Workstation 5RP,electronics,300,Manufacturing Line 2,inactive,21.093,
+Washer OMJ,appliances,200,Main Office,active,6.862,
+Washer J72,appliances,80,R&D Lab,inactive,5.964,High usage device
+Washer 4Z9,appliances,200,Manufacturing Line 2,active,1.771,
+Switch HSY,electronics,450,Parking Level -2,active,34.781,Legacy unit
+Monitor X8L,electronics,600,Roof,active,31.47,
+AC Unit NWZ,cooling,600,Reception,active,4.485,
+LED Strip HIB,lighting,18,Conference 1,active,0.253,New installation
+Coffee Machine IM7,appliances,80,North Wing,active,5.958,
+Boiler 6LJ,heating,1500,R&D Lab,active,38.973,
+Evaporator 6EE,cooling,900,Reception,inactive,38.331,
+Monitor AMK,electronics,90,Parking Level -1,active,2.189,Check wiring
+LED Strip ZR3,lighting,48,Parking Level -2,inactive,1.548,
+Coffee Machine HFB,appliances,120,South Wing,active,6.201,
+Router HUV,electronics,600,Warehouse A,active,33.153,High usage device
+Monitor 31U,electronics,600,Parking Level -1,active,8.568,
+Coffee Machine EA3,appliances,120,East Wing,active,1.033,
+Cooling Unit ZYL,cooling,1200,Conference 2,active,94.425,Check wiring
+Vending Machine QCW,appliances,900,R&D Lab,active,39.721,
+Radiator MXS,heating,800,Conference 2,active,24.935,
+Heat Pump DHV,heating,800,Admin Wing,active,12.843,Scheduled for maintenance Q4
+Radiator AC1,heating,2000,East Wing,inactive,18.904,
+LED Strip O3U,lighting,36,Manufacturing Line 2,active,0.781,Check wiring
+LED Strip YIP,lighting,48,Parking Level -2,active,0.749,
+Cooling Unit PET,cooling,450,Warehouse A,inactive,34.259,
+Boiler TDP,heating,3000,Manufacturing Line 2,active,38.788,New installation
+Floodlight 0GG,lighting,24,Manufacturing Line 2,active,1.029,
+Router FMA,electronics,45,North Wing,inactive,0.584,
+LED Strip B8Q,lighting,24,Conference 2,inactive,0.344,
+CNC Controller 1LY,electronics,90,R&D Lab,active,5.842,High usage device
+Water Heater GDM,heating,1200,Conference 1,active,76.592,Scheduled for maintenance Q4
+Boiler 7LN,heating,1500,Conference 1,active,91.166,
+Tube Light 94M,lighting,100,R&D Lab,active,0.618,Scheduled for maintenance Q4
+Floodlight MBL,lighting,12,Warehouse B,inactive,0.288,High usage device
+Monitor 9YD,electronics,600,QA Lab,inactive,44.982,
+AC Unit VEL,cooling,1600,QA Lab,inactive,64.265,
+LED Strip RLR,lighting,100,Parking Level -1,inactive,2.803,
+3D Printer U4U,electronics,45,R&D Lab,active,2.478,
+Street Light R9U,lighting,36,Main Office,active,1.182,
+Washer WGF,appliances,900,Manufacturing Line 2,active,19.249,
+CNC Controller ARS,electronics,90,South Wing,active,3.525,
+Cooling Unit UVP,cooling,900,Parking Level -1,active,49.562,Legacy unit
+Water Heater 2OF,heating,1500,Server Room,active,50.727,
+Microwave Y1M,appliances,200,Server Room,inactive,11.132,Scheduled for maintenance Q4
+Floodlight B8S,lighting,18,North Wing,active,0.621,
+Router WL7,electronics,150,Parking Level -2,active,4.349,
+3D Printer RGU,electronics,90,Cafeteria,active,3.85,Legacy unit
+Router A3W,electronics,300,Admin Wing,active,7.954,
+Switch 21L,electronics,200,Cafeteria,inactive,14.093,
+Track Light TET,lighting,60,South Wing,active,1.637,
+Cooling Unit YZ0,cooling,1200,Manufacturing Line 1,active,66.3,
+IoT Gateway 07S,electronics,45,R&D Lab,active,1.929,
+Boiler I7A,heating,2000,Warehouse A,active,75.329,High usage device
+Vending Machine C45,appliances,900,QA Lab,active,20.301,
+Radiator VCD,heating,1500,Conference 1,active,26.293,
+Downlight YQ8,lighting,24,West Wing,inactive,0.252,
+Dryer 19H,appliances,200,East Wing,inactive,8.875,
+Floodlight FJ2,lighting,80,Parking Level -1,active,2.728,Legacy unit
+Workstation FPT,electronics,150,West Wing,active,1.95,
+Dryer 4Y7,appliances,350,R&D Lab,active,9.013,
+Heat Pump MMW,heating,800,Main Office,active,63.44,
+Vent Fan BGA,cooling,450,South Wing,inactive,24.812,
+Workstation HL5,electronics,45,Warehouse A,inactive,1.15,
+Water Heater C67,heating,1200,Manufacturing Line 2,active,14.986,
+Vending Machine T8D,appliances,120,Manufacturing Line 2,inactive,5.26,Check wiring
+Water Heater 8YF,heating,3000,Manufacturing Line 2,inactive,213.25,Legacy unit
+Cooling Unit KLU,cooling,900,Roof,active,13.539,
+Monitor JJE,electronics,90,Manufacturing Line 2,active,4.885,
+Vending Machine 17K,appliances,500,Parking Level -2,active,25.877,New installation
+AC Unit DBO,cooling,900,Main Office,active,31.936,
+HVAC GWE,heating,3000,Roof,active,121.756,Scheduled for maintenance Q4
+CNC Controller 0RC,electronics,45,Parking Level -2,active,2.315,
+Water Heater YDA,heating,1500,Warehouse B,active,21.636,
+Boiler M3N,heating,2000,R&D Lab,active,95.848,
+Washer J00,appliances,500,Server Room,active,29.558,
+Monitor R3X,electronics,45,Roof,inactive,2.293,
+Track Light FU9,lighting,100,West Wing,active,3.372,
+Switch XRS,electronics,450,QA Lab,active,5.862,
+Track Light SWU,lighting,60,Parking Level -2,active,1.657,High usage device
+Heat Pump KCN,heating,1200,Conference 1,active,69.225,
+Refrigerator 6NV,appliances,200,Main Office,active,11.248,Scheduled for maintenance Q4
+Tube Light FEJ,lighting,18,Admin Wing,inactive,0.314,
+IoT Gateway 7ZX,electronics,90,East Wing,active,5.811,
+Tube Light A57,lighting,12,Manufacturing Line 1,active,0.829,High usage device
+CNC Controller NMO,electronics,150,Warehouse B,active,5.14,High usage device

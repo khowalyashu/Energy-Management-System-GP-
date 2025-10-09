@@ -1,4 +1,4 @@
-// routes/devices.js (defensive version)
+// routes/devices.js
 const express = require('express');
 const router = express.Router();
 
@@ -10,7 +10,7 @@ const auth =
     : authModule?.verifyToken ||
     authModule?.auth ||
     authModule?.default ||
-    ((req, _res, next) => next()); // no-op fallback (won't block)
+    ((req, _res, next) => next()); // no-op fallback 
 
 // --- Resolve controller functions even if names d iffer
 const ctrl = require('../controllers/deviceController');

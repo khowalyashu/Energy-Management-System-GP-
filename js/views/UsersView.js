@@ -1,161 +1,175 @@
-class UsersView {
+// js/views/UsersView.js
+(function () {
+  class UsersView {
     constructor() {
-        this.usersGrid = document.getElementById('users-grid');
+      this.grid = document.getElementById('users-grid');
+      this.addBtn = document.getElementById('add-user-btn');
+
+      // Modal bits
+      this.modal = document.getElementById('user-modal');
+      this.titleEl = document.getElementById('user-modal-title');
+      this.form = document.getElementById('user-form');
+      this.nameEl = document.getElementById('u-name');
+      this.usernameEl = document.getElementById('u-username');
+      this.emailEl = document.getElementById('u-email');
+      this.roleEl = document.getElementById('u-role');
+      this.btnCancel = document.getElementById('user-cancel');
+      this.btnSave = document.getElementById('user-save');
+
+      this.editingUser = null;
+
+      // Wire events (guards keep things safe even if elements are missing)
+      if (this.addBtn) this.addBtn.addEventListener('click', () => this.openCreate());
+      if (this.btnCancel) this.btnCancel.addEventListener('click', () => this.close());
+      if (this.modal) {
+        this.modal.addEventListener('click', (e) => {
+          if (e.target === this.modal) this.close();
+        });
+      }
+      if (this.btnSave) this.btnSave.addEventListener('click', () => this.save());
+
+      // Auto-mount when the Users section becomes active
+      this.ensureAutoMount();
     }
-    
-    displayUsers(users) {
-        this.usersGrid.innerHTML = '';
-        
-        if (users.length === 0) {
-            this.usersGrid.innerHTML = `
-                <div class="no-users">
-                    <i class="fas fa-users"></i>
-                    <p>No users found. Add your first user to get started.</p>
-                </div>
-            `;
-            return;
+
+    ensureAutoMount() {
+      const section = document.getElementById('users-content');
+      if (!section) return;
+
+      const tryRender = async () => {
+        if (section.classList.contains('active')) {
+          await this.mount();
+          observer.disconnect();
         }
-        
-        users.forEach(user => {
-            const userCard = this.createUserCard(user);
-            this.usersGrid.appendChild(userCard);
-        });
+      };
+
+      const observer = new MutationObserver(tryRender);
+      observer.observe(section, { attributes: true, attributeFilter: ['class'] });
+
+      // Try immediately in case Users is already active
+      tryRender();
     }
-    
-    createUserCard(user) {
-        const card = document.createElement('div');
-        card.className = 'user-card';
-        card.innerHTML = `
-            <div class="user-header">
-                <div class="user-avatar">
-                    <i class="fas fa-user"></i>
-                </div>
-                <div class="user-info">
-                    <h3 class="user-name">${user.name}</h3>
-                    <span class="user-role ${user.role}">${user.role}</span>
-                </div>
-            </div>
-            <div class="user-details">
-                <div class="user-detail">
-                    <span class="detail-label">Username:</span>
-                    <span class="detail-value">${user.username}</span>
-                </div>
-                <div class="user-detail">
-                    <span class="detail-label">Email:</span>
-                    <span class="detail-value">${user.email}</span>
-                </div>
-                <div class="user-detail">
-                    <span class="detail-label">Joined:</span>
-                    <span class="detail-value">${new Date(user.createdAt).toLocaleDateString()}</span>
-                </div>
-            </div>
-            <div class="user-actions">
-                <button class="btn btn-primary" data-action="edit" data-id="${user._id || user.id}">Edit</button>
-                <button class="btn btn-secondary" data-action="delete" data-id="${user._id || user.id}">Delete</button>
-            </div>
-        `;
-        
-        return card;
+
+    async mount() {
+      try {
+        const list = await ApiService.users();
+        await this.render(list);
+      } catch (e) {
+        console.error('UsersView mount error:', e);
+      }
     }
-    
-    showAddUserForm() {
-        const formHtml = `
-            <div class="modal" id="add-user-modal">
-                <div class="modal-content">
-                    <h2>Add New User</h2>
-                    <form id="add-user-form">
-                        <div class="form-group">
-                            <label for="user-name">Full Name</label>
-                            <input type="text" id="user-name" name="name" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="user-username">Username</label>
-                            <input type="text" id="user-username" name="username" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="user-email">Email</label>
-                            <input type="email" id="user-email" name="email" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="user-password">Password</label>
-                            <input type="password" id="user-password" name="password" required minlength="6">
-                        </div>
-                        <div class="form-group">
-                            <label for="user-role">Role</label>
-                            <select id="user-role" name="role" required>
-                                <option value="user">User</option>
-                                <option value="admin">Admin</option>
-                            </select>
-                        </div>
-                        <div class="form-actions">
-                            <button type="button" class="btn btn-secondary" id="cancel-add-user">Cancel</button>
-                            <button type="submit" class="btn btn-primary">Add User</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        `;
-        
-        document.body.insertAdjacentHTML('beforeend', formHtml);
-        
-        document.getElementById('add-user-form').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const formData = new FormData(e.target);
-            const userData = Object.fromEntries(formData.entries());
-            window.myEMSApp.controllers.user.addUser(userData);
-        });
-        
-        document.getElementById('cancel-add-user').addEventListener('click', () => {
-            document.getElementById('add-user-modal').remove();
-        });
+
+    async render(users = []) {
+      if (!this.grid) return;
+
+      if (!Array.isArray(users) || users.length === 0) {
+        this.grid.innerHTML = `
+          <div class="no-users">
+            <i class="fas fa-users"></i>
+            <p>No users yet. Click <strong>Add User</strong> to create one.</p>
+          </div>`;
+        return;
+      }
+
+      const frag = document.createDocumentFragment();
+      users.forEach(u => frag.appendChild(this.card(u)));
+      this.grid.innerHTML = '';
+      this.grid.appendChild(frag);
     }
-    
-    showEditUserForm(user) {
-        const formHtml = `
-            <div class="modal" id="edit-user-modal">
-                <div class="modal-content">
-                    <h2>Edit User</h2>
-                    <form id="edit-user-form">
-                        <input type="hidden" name="id" value="${user._id || user.id}">
-                        <div class="form-group">
-                            <label for="edit-user-name">Full Name</label>
-                            <input type="text" id="edit-user-name" name="name" value="${user.name}" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="edit-user-email">Email</label>
-                            <input type="email" id="edit-user-email" name="email" value="${user.email}" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="edit-user-role">Role</label>
-                            <select id="edit-user-role" name="role" required>
-                                <option value="user" ${user.role === 'user' ? 'selected' : ''}>User</option>
-                                <option value="admin" ${user.role === 'admin' ? 'selected' : ''}>Admin</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="edit-user-password">New Password (leave blank to keep current)</label>
-                            <input type="password" id="edit-user-password" name="password" minlength="6">
-                        </div>
-                        <div class="form-actions">
-                            <button type="button" class="btn btn-secondary" id="cancel-edit-user">Cancel</button>
-                            <button type="submit" class="btn btn-primary">Save Changes</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        `;
-        
-        document.body.insertAdjacentHTML('beforeend', formHtml);
-        
-        document.getElementById('edit-user-form').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const formData = new FormData(e.target);
-            const userData = Object.fromEntries(formData.entries());
-            window.myEMSApp.controllers.user.updateUser(userData);
-        });
-        
-        document.getElementById('cancel-edit-user').addEventListener('click', () => {
-            document.getElementById('edit-user-modal').remove();
-        });
+
+    card(user) {
+      const role = (user.role || 'user').toLowerCase();
+      const el = document.createElement('div');
+      el.className = 'card user-card';
+      el.innerHTML = `
+        <div class="user-card__head">
+          <div class="user-card__title">${this.esc(user.name || user.username || 'User')}</div>
+          <span class="badge ${role === 'admin' ? 'badge-admin' : 'badge-user'}">${role.toUpperCase()}</span>
+        </div>
+        <div class="user-card__body">
+          <div class="kv"><span>Username:</span> <strong>${this.esc(user.username || '-')}</strong></div>
+          <div class="kv"><span>Email:</span> ${this.esc(user.email || '-')}</div>
+          <div class="kv"><span>Joined:</span> ${user.joinedAt ? new Date(user.joinedAt).toLocaleDateString() : '-'}</div>
+        </div>
+        <div class="user-card__actions">
+          <button class="btn btn-primary btn-sm" data-act="edit"><i class="fas fa-pen"></i> Edit</button>
+          <button class="btn btn-secondary btn-sm" data-act="delete"><i class="fas fa-trash"></i> Delete</button>
+        </div>
+      `;
+
+      el.querySelector('[data-act="edit"]').addEventListener('click', () => this.openEdit(user));
+      el.querySelector('[data-act="delete"]').addEventListener('click', async () => {
+        if (!confirm(`Delete user "${user.username || user.name}"?`)) return;
+        try {
+          await ApiService.deleteUser(user._id);
+          const list = await ApiService.users();
+          this.render(list);
+        } catch (e) {
+          alert(e.message || 'Delete failed');
+        }
+      });
+
+      return el;
     }
-}
+
+    openCreate() {
+      this.editingUser = null;
+      this.titleEl.textContent = 'Add User';
+      this.form && this.form.reset();
+      if (this.roleEl) this.roleEl.value = 'user';
+      this.show();
+    }
+
+    openEdit(user) {
+      this.editingUser = user;
+      this.titleEl.textContent = 'Edit User';
+      this.nameEl.value = user.name || '';
+      this.usernameEl.value = user.username || '';
+      this.emailEl.value = user.email || '';
+      this.roleEl.value = (user.role || 'user').toLowerCase();
+      this.show();
+    }
+
+    show() {
+      if (!this.modal) return;
+      this.modal.style.display = 'flex';
+      document.body.classList.add('no-scroll');
+    }
+
+    close() {
+      if (!this.modal) return;
+      this.modal.style.display = 'none';
+      document.body.classList.remove('no-scroll');
+    }
+
+    async save() {
+      const name = (this.nameEl.value || '').trim();
+      const username = (this.usernameEl.value || '').trim();
+      const email = (this.emailEl.value || '').trim();
+      const role = this.roleEl.value;
+
+      if (!name || !username) {
+        alert('Name and username are required.');
+        return;
+      }
+
+      try {
+        if (this.editingUser) {
+          await ApiService.updateUser(this.editingUser._id, { name, username, email, role });
+        } else {
+          await ApiService.createUser({ name, username, email, role });
+        }
+        this.close();
+        const list = await ApiService.users();
+        this.render(list);
+      } catch (e) {
+        alert(e.message || 'Save failed');
+      }
+    }
+
+    esc(s) { return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  }
+
+  // create the view immediately (it will auto-mount on first time Users tab becomes active)
+  window.usersView = new UsersView();
+})();

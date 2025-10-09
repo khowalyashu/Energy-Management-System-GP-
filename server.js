@@ -1,4 +1,4 @@
-// server.js (MongoDB mode)
+// server.js
 require('dotenv').config();
 
 const path = require('path');

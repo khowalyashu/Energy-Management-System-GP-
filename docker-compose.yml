@@ -1,17 +1,43 @@
 services:
   mongo:
-    image: mongo:6
+    image: mongo:7
+    container_name: myems-mongo
     restart: unless-stopped
-    ports: ["27017:27017"]
-    volumes: ["mongo_data:/data/db"]
+    environment:
+      MONGO_INITDB_DATABASE: myems
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test:
+        ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   app:
-    image: ems-app:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: myems-app
+    restart: unless-stopped
     depends_on:
-      - mongo
-    ports: ["3000:3000"]
+      mongo:
+        condition: service_healthy
+
     environment:
-      MONGO_URL: mongodb://mongo:27017/ems
+      NODE_ENV: production
+      PORT: 3000
+
+      MONGODB_URI: "mongodb://mongo:27017/myems"
+    ports:
+      - "3000:3000"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3000/api/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
 
 volumes:
   mongo_data:

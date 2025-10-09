@@ -1,57 +1,88 @@
+// js/views/SettingsView.js
+
 class SettingsView {
-    constructor() {
-        this.profileForm = document.getElementById('profile-form');
-        this.notifications = document.getElementById('notifications');
-        this.darkMode = document.getElementById('dark-mode');
-        this.dataRefresh = document.getElementById('data-refresh');
+  constructor() {
+    this.form = document.getElementById('profile-form');
+    this.nameInput = document.getElementById('profile-name');
+    this.emailInput = document.getElementById('profile-email');
+
+    this.prefNotify = document.getElementById('notifications');
+    this.prefDark   = document.getElementById('dark-mode');
+    this.prefRefresh = document.getElementById('data-refresh');
+
+    this.saveBtn = this.form?.querySelector('button[type="submit"]');
+
+    this.PREFS_KEY = 'myems.prefs';
+
+    this.loadPrefs();
+
+    if (this.form) {
+      this.form.addEventListener('submit', (e) => this.onSave(e));
     }
-    
-    loadUserPreferences(user) {
-        document.getElementById('profile-name').value = user.name || '';
-        document.getElementById('profile-email').value = user.email || '';
-        
-        if (user.preferences) {
-            this.notifications.checked = user.preferences.notifications !== undefined ? user.preferences.notifications : true;
-            this.darkMode.checked = user.preferences.darkMode || false;
-            this.dataRefresh.value = user.preferences.dataRefresh || 5;
-        }
+    [this.prefNotify, this.prefDark, this.prefRefresh].forEach(el => {
+      if (el) el.addEventListener('change', () => this.persistPrefs());
+    });
+  }
+
+  async onSave(e) {
+    e.preventDefault();
+    if (!this.saveBtn) return;
+    this.saveBtn.disabled = true;
+    this.saveBtn.textContent = 'Saving…';
+
+    try {
+      await ApiService.updateProfile({
+        name: this.nameInput?.value?.trim(),
+        email: this.emailInput?.value?.trim(),
+      });
+      this.flash('Saved');
+    } catch (err) {
+      this.flash(err?.message || 'Failed to save', true);
+    } finally {
+      this.saveBtn.disabled = false;
+      this.saveBtn.textContent = 'Save Changes';
     }
-    
-    getPreferences() {
-        return {
-            notifications: this.notifications.checked,
-            darkMode: this.darkMode.checked,
-            dataRefresh: parseInt(this.dataRefresh.value)
-        };
+  }
+
+  loadPrefs() {
+    try {
+      const raw = localStorage.getItem(this.PREFS_KEY);
+      if (!raw) return;
+      const p = JSON.parse(raw);
+      if (this.prefNotify) this.prefNotify.checked = !!p.notify;
+      if (this.prefDark)   this.prefDark.checked   = !!p.dark;
+      if (this.prefRefresh && p.refresh) this.prefRefresh.value = String(p.refresh);
+    } catch {}
+  }
+
+  persistPrefs() {
+    const prefs = {
+      notify: !!(this.prefNotify && this.prefNotify.checked),
+      dark: !!(this.prefDark && this.prefDark.checked),
+      refresh: this.prefRefresh ? Number(this.prefRefresh.value) : 5,
+    };
+    try { localStorage.setItem(this.PREFS_KEY, JSON.stringify(prefs)); } catch {}
+    this.flash('Preferences updated');
+  }
+
+  flash(text, isErr = false) {
+    let el = document.getElementById('settings-flash');
+    if (!el) {
+      el = document.createElement('div');
+      el.id = 'settings-flash';
+      el.style.cssText = `
+        position: fixed; left: 50%; transform: translateX(-50%);
+        bottom: 20px; background: #111827; color:#fff; padding:10px 14px;
+        border-radius: 8px; z-index: 9999; display:none; box-shadow:0 6px 22px rgba(0,0,0,.18)
+      `;
+      document.body.appendChild(el);
     }
-    
-    showMessage(message, type = 'success') {
-        // Create a temporary message element
-        const messageDiv = document.createElement('div');
-        messageDiv.className = `message ${type}`;
-        messageDiv.textContent = message;
-        messageDiv.style.position = 'fixed';
-        messageDiv.style.top = '20px';
-        messageDiv.style.right = '20px';
-        messageDiv.style.padding = '10px 20px';
-        messageDiv.style.borderRadius = '5px';
-        messageDiv.style.zIndex = '1000';
-        
-        if (type === 'success') {
-            messageDiv.style.backgroundColor = '#d4edda';
-            messageDiv.style.color = '#155724';
-            messageDiv.style.border = '1px solid #c3e6cb';
-        } else {
-            messageDiv.style.backgroundColor = '#f8d7da';
-            messageDiv.style.color = '#721c24';
-            messageDiv.style.border = '1px solid #f5c6cb';
-        }
-        
-        document.body.appendChild(messageDiv);
-        
-        // Remove message after 3 seconds
-        setTimeout(() => {
-            document.body.removeChild(messageDiv);
-        }, 3000);
-    }
+    el.textContent = text;
+    el.style.background = isErr ? '#c0392b' : '#111827';
+    el.style.display = 'block';
+    clearTimeout(this._fTimer);
+    this._fTimer = setTimeout(() => (el.style.display = 'none'), 1800);
+  }
 }
+
+window.SettingsView = SettingsView;
