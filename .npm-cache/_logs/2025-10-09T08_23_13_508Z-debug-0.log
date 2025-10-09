@@ -5,10 +5,10 @@
 4 silly config load:file:D:\Deakin - Master of IT\2025_T2\SIT725 - GP\Energy-Management-System-GP-\.npmrc
 5 silly config load:file:C:\Users\Ashan indika\.npmrc
 6 silly config load:file:C:\Users\Ashan indika\AppData\Roaming\npm\etc\npmrc
-7 verbose title npm exec jest --clearCache
-8 verbose argv "exec" "--" "jest" "--clearCache"
-9 verbose logfile logs-max:10 dir:D:\Deakin - Master of IT\2025_T2\SIT725 - GP\Energy-Management-System-GP-\.npm-cache\_logs\2025-10-09T07_33_36_805Z-
-10 verbose logfile D:\Deakin - Master of IT\2025_T2\SIT725 - GP\Energy-Management-System-GP-\.npm-cache\_logs\2025-10-09T07_33_36_805Z-debug-0.log
+7 verbose title npm test
+8 verbose argv "test"
+9 verbose logfile logs-max:10 dir:D:\Deakin - Master of IT\2025_T2\SIT725 - GP\Energy-Management-System-GP-\.npm-cache\_logs\2025-10-09T08_23_13_508Z-
+10 verbose logfile D:\Deakin - Master of IT\2025_T2\SIT725 - GP\Energy-Management-System-GP-\.npm-cache\_logs\2025-10-09T08_23_13_508Z-debug-0.log
 11 silly logfile start cleaning logs, removing 1 files
 12 silly logfile done cleaning log files
 13 verbose cwd D:\Deakin - Master of IT\2025_T2\SIT725 - GP\Energy-Management-System-GP-

@@ -1,21 +1,28 @@
-FROM node:20-alpine AS base
+# ---- Base runtime ----
+FROM node:22-alpine
+
+# Create app dir and set it as workdir
 WORKDIR /usr/src/app
 
-FROM base AS deps
+# Install deps first 
 COPY package*.json ./
-RUN npm ci --only=production
 
-FROM node:20-alpine AS runtime
-ENV NODE_ENV=production
-WORKDIR /usr/src/app
+RUN npm ci --omit=dev
 
-# production deps
-COPY --from=deps /usr/src/app/node_modules ./node_modules
-# app source
+# Copy the rest of the source 
 COPY . .
 
-# Make sure your app listens on 0.0.0.0:PORT inside container
-ENV PORT=3000
+# Environment
+ENV NODE_ENV=production \
+    PORT=3000
+
+# Security: run as non-root
+USER node
+
 EXPOSE 3000
 
-CMD ["npm", "start"]
+# Healthcheck (optional; Docker Compose will also have one)
+HEALTHCHECK --interval=30s --timeout=5s --start-period=20s CMD wget -qO- http://127.0.0.1:3000/api/health || exit 1
+
+# Start the server
+CMD ["node", "server.js"]
