@@ -13,7 +13,7 @@
   }
 
   function toast(msg) {
-    try { alert(msg); } catch {}
+    try { alert(msg); } catch { }
   }
 
   // ------- dashboard -------
@@ -24,7 +24,7 @@
     try {
       const stats = await ApiService.stats();
       $('#energy-value').textContent = `${fmt(stats.energy, 2)} kWh`;
-      $('#cost-value').textContent   = `$${fmt(stats.cost, 2)}`;
+      $('#cost-value').textContent = `$${fmt(stats.cost, 2)}`;
       $('#devices-value').textContent = `${fmt(stats.devices, 0)}`;
       $('#savings-value').textContent = `$${fmt(stats.savings, 2)}`;
 
@@ -179,33 +179,15 @@
     await renderUsers();
   }
 
-  // ------- reports -------
+  // ------- reports (using ReportController) -------
+  const reportController = new ReportController();
+
   async function renderReports() {
-    const wrap = $('#report-container');
-    wrap.innerHTML = '';
-    const list = await ApiService.reports();
-    if (!list.length) {
-      wrap.innerHTML = `<div style="padding:12px;color:#777">No reports yet. Click “Generate Report”.</div>`;
-      return;
-    }
-    list.forEach(r => {
-      const row = document.createElement('div');
-      row.className = 'report-row';
-      row.innerHTML = `
-        <div class="report-title"><b>${r.title || 'Report'}</b></div>
-        <div>Total Consumption: <b>${fmt(r.totalConsumption || 0)} kWh</b></div>
-        <div>Total Cost: <b>$${fmt(r.totalCost || 0)}</b></div>
-        <div>Data Points: <b>${r.dataPoints || 0}</b></div>
-      `;
-      wrap.appendChild(row);
-    });
+    await reportController.loadReports();
   }
 
   async function generateReportFlow() {
-    const typeSelect = $('#report-type');
-    const type = typeSelect?.value || 'daily';
-    await ApiService.generateReport(type);
-    await renderReports();
+    await reportController.generateReport();
   }
 
   // ------- navigation + events -------
