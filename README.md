@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-# Energy-Management-System-GP-
-Energy Management System
-=======
+
 # MyEMS – Energy Management System
 
 A lightweight energy management dashboard with:
