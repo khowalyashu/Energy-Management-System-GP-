@@ -15,14 +15,14 @@
   let token = null;
   try {
     token = localStorage.getItem(LS_TOKEN) || null;
-  } catch {}
+  } catch { }
 
   function setToken(t) {
     token = t || null;
     try {
       if (token) localStorage.setItem(LS_TOKEN, token);
       else localStorage.removeItem(LS_TOKEN);
-    } catch {}
+    } catch { }
   }
 
   // --------------- localStorage helpers ---------------
@@ -37,7 +37,7 @@
   function writeLS(key, value) {
     try {
       localStorage.setItem(key, JSON.stringify(value));
-    } catch {}
+    } catch { }
   }
   function uid(prefix = '') {
     return prefix + Math.random().toString(36).slice(2) + Date.now().toString(36);
@@ -48,8 +48,8 @@
     if (!readLS(LS_KEYS.devices).length) {
       writeLS(LS_KEYS.devices, [
         { _id: uid('dev_'), name: 'Living Room Lights', type: 'lighting', power: 100, location: 'Living Room', active: true },
-        { _id: uid('dev_'), name: 'Kitchen HVAC',       type: 'heating',  power: 1500, location: 'Kitchen',     active: true },
-        { _id: uid('dev_'), name: 'Office Computer',    type: 'electronics', power: 300, location: 'Office',    active: false },
+        { _id: uid('dev_'), name: 'Kitchen HVAC', type: 'heating', power: 1500, location: 'Kitchen', active: true },
+        { _id: uid('dev_'), name: 'Office Computer', type: 'electronics', power: 300, location: 'Office', active: false },
       ]);
     }
     if (!readLS(LS_KEYS.users).length) {
@@ -82,7 +82,7 @@
     if (res.status === 204) return null;
 
     let data = null;
-    try { data = await res.json(); } catch {}
+    try { data = await res.json(); } catch { }
 
     if (!res.ok) {
       const msg = (data && (data.message || data.error)) || res.statusText || `HTTP ${res.status}`;
@@ -161,9 +161,9 @@
     try {
       const s = await request('/energy/stats');
       const devicesList = await devices();
-      const energy  = Number(s.totalConsumption ?? s.energy ?? 0);
-      const cost    = Number(s.totalCost ?? s.cost ?? 0);
-      const devs    = Number(s.devices ?? devicesList.length ?? 0);
+      const energy = Number(s.totalConsumption ?? s.energy ?? 0);
+      const cost = Number(s.totalCost ?? s.cost ?? 0);
+      const devs = Number(s.devices ?? devicesList.length ?? 0);
       const savings = Number(s.potentialSavings ?? s.savings ?? Math.max(0, (energy * 0.6 - cost) * 0.2));
       return { energy, cost, devices: devs, savings };
     } catch {
@@ -202,14 +202,30 @@
   }
 
   // --------------- Reports ---------------
-  async function reports() {
-    try { return await request('/reports'); }
+  async function reports(filters = {}) {
+    try {
+      const params = new URLSearchParams();
+      if (filters.deviceType) params.append('deviceType', filters.deviceType);
+      if (filters.search) params.append('search', filters.search);
+
+      const url = `/reports${params.toString() ? '?' + params.toString() : ''}`;
+      return await request(url);
+    }
     catch { return readLS(LS_KEYS.reports, []); }
   }
 
-  async function generateReport(type = 'daily') {
+  async function getReport(id) {
+    try { return await request(`/reports/${encodeURIComponent(id)}`); }
+    catch { return readLS(LS_KEYS.reports, []).find(r => r._id === id) || null; }
+  }
+
+  async function generateReport(options = {}) {
+    const { type = 'daily', deviceType = null, costPerKwh = 0.12 } = options;
     try {
-      return await request('/reports/generate', { method: 'POST', body: { type } });
+      return await request('/reports/generate', {
+        method: 'POST',
+        body: { type, deviceType, costPerKwh }
+      });
     } catch {
       const list = readLS(LS_KEYS.reports, []);
       const now = new Date();
@@ -217,15 +233,93 @@
         _id: uid('rpt_'),
         title: `${type[0].toUpperCase() + type.slice(1)} Report - ${now.toDateString()}`,
         type,
-        createdAt: now.toISOString(),
+        period: now.toDateString(),
+        generatedAt: now.toISOString(),
+        lastUpdated: now.toISOString(),
         totalConsumption: Number((Math.random() * 120 + 20).toFixed(2)),
         totalCost: Number((Math.random() * 40 + 5).toFixed(2)),
         dataPoints: Math.floor(Math.random() * 200 + 80),
+        deviceTypeFilter: deviceType,
+        costPerKwh,
+        weeklyStats: {
+          total: Number((Math.random() * 120 + 20).toFixed(2)),
+          min: Number((Math.random() * 5 + 1).toFixed(2)),
+          max: Number((Math.random() * 20 + 10).toFixed(2)),
+          avg: Number((Math.random() * 15 + 5).toFixed(2))
+        },
+        peakHours: Array.from({ length: 24 }, (_, i) => ({
+          hour: i,
+          consumption: Number((Math.random() * 10 + 2).toFixed(2)),
+          isPeak: [9, 14, 19].includes(i)
+        })),
+        filename: `${type}_report_${Date.now()}.pdf`
       };
       list.unshift(r);
       writeLS(LS_KEYS.reports, list);
       return r;
     }
+  }
+
+  async function deleteReport(id) {
+    try {
+      return await request(`/reports/${encodeURIComponent(id)}`, { method: 'DELETE' });
+    } catch {
+      const list = readLS(LS_KEYS.reports, []);
+      writeLS(LS_KEYS.reports, list.filter(r => r._id !== id));
+      return { ok: true };
+    }
+  }
+
+  function exportReportCSV(id) {
+    const token = localStorage.getItem('token');
+    const url = `${window.location.origin}${BASE}/reports/${encodeURIComponent(id)}/export/csv`;
+
+    // Create a temporary link to trigger download
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', '');
+    link.style.display = 'none';
+
+    // Add authorization header by using fetch instead
+    fetch(url, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    })
+      .then(response => response.blob())
+      .then(blob => {
+        const blobUrl = window.URL.createObjectURL(blob);
+        link.href = blobUrl;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(blobUrl);
+      })
+      .catch(err => console.error('Export CSV failed:', err));
+  }
+
+  function exportReportExcel(id) {
+    const token = localStorage.getItem('token');
+    const url = `${window.location.origin}${BASE}/reports/${encodeURIComponent(id)}/export/excel`;
+
+    // Create a temporary link to trigger download
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', '');
+    link.style.display = 'none';
+
+    // Add authorization header by using fetch instead
+    fetch(url, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    })
+      .then(response => response.blob())
+      .then(blob => {
+        const blobUrl = window.URL.createObjectURL(blob);
+        link.href = blobUrl;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(blobUrl);
+      })
+      .catch(err => console.error('Export Excel failed:', err));
   }
 
   // --------------- Devices (CRUD with normalization) ---------------
@@ -335,7 +429,7 @@
     // dashboard
     stats, energy,
     // reports
-    reports, generateReport,
+    reports, getReport, generateReport, deleteReport, exportReportCSV, exportReportExcel,
     // devices
     devices, device, createDevice, updateDevice, deleteDevice,
     // users
